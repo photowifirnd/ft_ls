@@ -29,7 +29,7 @@ $(NAME):$(OBJS)
 	@make -C $(PATHS)ft_printf/ --no-print-directory
 	@printf "\033[99D\033[J\033[38;5;214mCompiling $(NAME)\n"
 	@gcc $(COMP_FLAG) $(OBJS) $(INC) $(LIB_PATH) $(LIB) -o $(NAME)
-	@printf "\033[99D\033[J\033[0;32mDONE!!! -> Usage: $(NAME) [OPTION]... [FILE]...\n\033[m"
+	@printf "\033[99D\033[J\033[0;32mWork Complete!!! -> Usage: $(NAME) [OPTION]... [FILE]...\n\033[m"
 
 # Compile object files
 $(OBJ_PATH)%.o:	$(SRC_PATH)%.c

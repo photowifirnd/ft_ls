@@ -37,7 +37,7 @@ $(LIB_NAME): $(OBJECTS)
 	@$(ARCHIVE) $(LIB_NAME) $(OBJS)
 	@printf "\033[99D\033[J\033[38;5;214mGenerating index from ft_printf.a\n"
 	@$(RANLIB) $(LIB_NAME)
-	@printf "\033[99D\033[J\033[0;32m$(LIB_NAME): Work complete!\n"
+	@printf "\033[99D\033[J\033[0;32m$(LIB_NAME): Done!!\n"
 
 .PHONY: all clean fclean
 
