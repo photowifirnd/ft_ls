@@ -3,7 +3,7 @@
 
 print_message:	
 	@printf "\033[99D\033[J\033[1;34m****** Start Compiling ******\n"
-	@$(MAKE) main_target --no-print-directory
+	@$(MAKE) --no-print-directory main_target
 
 # Variables
 NAME		=ft_ls
