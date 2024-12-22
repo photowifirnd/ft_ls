@@ -82,5 +82,8 @@ char			*ft_itoa(int n)
 		return (ft_strdup("0"));
 	if (!(c = (char *)malloc(sizeof(char) * aux + 2)))
 		return (NULL);
-	return (ft_reverse(ft_extract(c, n, flag, aux), aux));
+	char *ret = ft_reverse(ft_extract(c, n, flag, aux), aux);
+	free(c);
+	c = NULL;
+	return (ret);
 }
