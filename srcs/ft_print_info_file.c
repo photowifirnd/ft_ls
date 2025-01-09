@@ -11,25 +11,25 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-void ft_print_description(t_file *file_description){
+
+//Print the detailed information of a file when the -l flag is set
+void ft_print_description(t_file *file_description)
+{
     char *date;
+    
     date = ft_strtrim(file_description->date, "\n");
-    char *width;
-    width = ft_itoa(size_len);
-    //ft_printf("%c", file_description->type);
     ft_printf("%s ", file_description->str_perm);
     ft_printf("%d ", file_description->nlink);
     ft_printf("%s ", file_description->str_owner);
     ft_printf("%s ", file_description->str_group);
-    ft_printf("%*d ", ft_strlen(width), file_description->size);
+    ft_printf("%*d ", size_len, file_description->size);
     ft_printf("%s ", date);
     ft_printf("%s\n", file_description->fname);
-
     ft_free_alloc(date);
-    ft_free_alloc(width);
 }
 //print files in the container, not directories: intended for files passed as arguments
-void ft_print_container(t_content **container, t_flags flags){
+void ft_print_files_in_args(t_content **container, t_flags flags)
+{
     t_content *current = *container;
     
     while ( current != NULL)
@@ -62,12 +62,17 @@ int ft_print_info_file(t_content **entry, t_flags flags)
 {
     t_content *current;
     t_file *file_description;
-
+    char *width_len;
+    
+    width_len = ft_itoa(size_len);
+    size_len = ft_strlen(width_len);
+    ft_free_alloc(width_len);
+    
     if (entry == NULL || *entry == NULL){
         return (SUCCESS);
 	}
     current = (*entry)->begin;
-    ft_print_container(entry, flags);
+    ft_print_files_in_args(entry, flags);
     ft_printf("\n");
     current = (*entry)->begin;
 
@@ -86,7 +91,7 @@ int ft_print_info_file(t_content **entry, t_flags flags)
         {
             if (current->file_description->type == 'd')
             {
-                ft_printf("%s:\n", current->file_description->fname);
+                ft_printf("\n%s:\n", current->file_description->fname);
                 ft_printf("total: %d\n", current->blk_total);
             }
             ft_print_subdir(&current->subdir);
@@ -107,30 +112,5 @@ int ft_print_info_file(t_content **entry, t_flags flags)
         }
         current = current->next;
     }
-	//ft_printf("\n");
-
     return (SUCCESS);
-}
-
-int OLD_ft_print_info_file(t_content **entry)
-{
-	char *date;
-	t_file *file_description;
-	
-	if (entry == NULL)
-		return (SUCCESS);
-	file_description = (*entry)->file_description;
-	date = ft_strtrim(file_description->date, "\n");
-	
-	ft_printf("%c", file_description->type);
-	ft_printf("%s ", file_description->str_perm);
-	ft_printf("%d ", file_description->nlink);
-	ft_printf("%s ", file_description->str_owner);
-	ft_printf("%s\t", file_description->str_group);
-	ft_printf("%d ", file_description->size);
-	ft_printf("%s ", date);
-	ft_printf("%s\n", file_description->fname);
-	ft_free_alloc(date);
-	
-	return (EXIT_SUCCESS);
 }
