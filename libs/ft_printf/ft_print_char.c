@@ -88,11 +88,16 @@ void		ft_print_char(t_print *list)
 		ft_set_null(list);
 	else
 	{
+		if (list->aux != NULL)
+			free(list->aux);
 		list->aux = ft_atos(val);
+		
 		list->aux = ft_fill_spaces(list);
 		list->len += ft_strlen(list->aux);
 		ft_putstr(list->aux);
 	}
+	if (list->aux != NULL)
+		free(list->aux);
 	list->aux = NULL;
 	ft_init_list(list);
 }

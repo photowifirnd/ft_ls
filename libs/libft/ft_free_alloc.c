@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_free_alloc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jheras-f <jheras-f@student.42madrid.com>   #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-12-23 06:23:11 by jheras-f          #+#    #+#             */
-/*   Updated: 2024-12-23 06:23:11 by jheras-f         ###   ########.fr       */
+/*   Created: 2024-12-31 16:36:58 by jheras-f          #+#    #+#             */
+/*   Updated: 2024-12-31 16:36:58 by jheras-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "libft.h"
 
-int ft_strcmp(const char *s1, const char *s2)
+void ft_free_alloc(void *ptr)
 {
-	while (*s1 && (*s1 == *s2))
+	if (ptr != NULL)
 	{
-		s1++;
-		s2++;
+		free(ptr);
+		ptr = NULL;
 	}
-	return *(unsigned char *)s1 - *(unsigned char *)s2;
 }

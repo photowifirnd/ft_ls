@@ -8,7 +8,7 @@ print_message:
 NAME		= 	libft.a
 
 CC			= 	gcc
-FLAGS		= 	-c -Wall -Wextra -Werror
+FLAGS		= 	-Wall -Wextra -Werror
 
 ARCHIVE		= 	ar rc
 RANLIB		= 	ranlib

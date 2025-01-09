@@ -56,6 +56,7 @@ int					ft_isprint(int c);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 void				*ft_calloc(size_t count, size_t size);
+void				ft_free_alloc(void *ptr);
 char				*ft_strdup(const char *s1);
 char				*ft_substr(const char *s, unsigned int start, size_t len);
 char				*ft_strjoin(const char *s1, const char *s2);
@@ -79,4 +80,5 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 					void (*del)(void *));
 char				*ft_strncat(char *dest, const char *src, size_t nb);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
+void				ft_sortArray(char **arr, int n);
 #endif

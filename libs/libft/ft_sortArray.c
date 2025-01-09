@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_sortArray.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jheras-f <jheras-f@student.42madrid.com>   #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-12-23 06:23:11 by jheras-f          #+#    #+#             */
-/*   Updated: 2024-12-23 06:23:11 by jheras-f         ###   ########.fr       */
+/*   Created: 2025-01-08 14:24:35 by jheras-f          #+#    #+#             */
+/*   Updated: 2025-01-08 14:24:35 by jheras-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_strcmp(const char *s1, const char *s2)
+#include "libft.h"
+
+void ft_sortArray(char **arr, int n)
 {
-	while (*s1 && (*s1 == *s2))
+	for (int i = 0; i < n; i++)
 	{
-		s1++;
-		s2++;
+		for (int j = i + 1; j < n; j++)
+		{
+			if (ft_strcmp(arr[i], arr[j]) > 0)
+			{
+				char *temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+			}
+		}
 	}
-	return *(unsigned char *)s1 - *(unsigned char *)s2;
 }

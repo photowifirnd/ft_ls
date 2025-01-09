@@ -70,7 +70,11 @@ void	ft_set_spaces_left(char *str, char c, t_print *list)
 	if (list->negflag == 1)
 	{
 		tmpjoin1 = ft_strjoin("-", list->aux);
-		free(list->aux);
+		if (list->aux != NULL)
+		{
+			free(list->aux);
+			list->aux = NULL;
+		}
 		list->aux = tmpjoin1;
 		list->spaces--;
 	}
@@ -78,11 +82,17 @@ void	ft_set_spaces_left(char *str, char c, t_print *list)
 		str[i++] = c;
 	str[i] = '\0';
 	tmpjoin2 = ft_strjoin(str, list->aux);
-	free(list->aux);
+	if (list->aux != NULL)
+	{
+		free(list->aux);
+		list->aux = NULL;
+	}
 	list->aux = tmpjoin2;
 	//Revisa esto con cuidado. los test salen bien, pero tengo dudas de estar liberando bien. si dudas borra.
-	tmpjoin1 = NULL;
-	free(tmpjoin1);
+	
+	//free(tmpjoin1);
+	//tmpjoin1 = NULL;
+	
 }
 
 void	ft_set_l_spaces_zeros(char *str, t_print *list)

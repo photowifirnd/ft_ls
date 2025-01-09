@@ -52,7 +52,10 @@ void		ft_set_zeros_width(size_t *i, t_print *list)
 	if (ft_strlen(list->aux) > 0)
 		list->zeros = ft_atoi(list->aux);
 	list->spaces = list->zeros;
-	free(list->aux);
+	if (list->aux != NULL){
+		free(list->aux);
+		list->aux = NULL;
+	}
 	list->aux = ft_strdup("");
 	if (list->ost[*i] == '.' || list->ost[*i] == '*')
 		ft_parse_flags(i, list);

@@ -9,7 +9,8 @@ print_message:
 NAME		=ft_ls
 SRC_PATH	=./srcs/
 OBJ_PATH	=./obj/
-SRCS		=$(SRC_PATH)main.c# Add all your source files here
+SRCS		=$(addprefix $(SRC_PATH), $(shell find ./srcs -maxdepth 1 -name "*.c" | rev | cut -d '/' -f1 |\
+				rev))#main.c# Add all your source files here
 OBJS		=$(SRCS:$(SRC_PATH)%.c=$(OBJ_PATH)%.o)
 COMP_FLAG	=-Wall -Wextra -Werror
 INC			=-I ./includes -I ./libs/libft/includes -I ./libs/ft_printf/includes# Add your include paths here
