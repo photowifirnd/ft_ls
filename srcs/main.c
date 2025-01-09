@@ -34,7 +34,7 @@ int main(int args, char *argv[])
 	
 	if (file_count > 0)
 		ret = ft_query_file(files_to_search, file_count, &container);
-	t_content *current = ft_get_container_head(container);	
+	t_content *current = ft_get_container_head(container);
 	if (current != NULL && current->name != NULL){
 		
 		while (current != NULL)

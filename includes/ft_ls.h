@@ -38,9 +38,11 @@ typedef struct		s_flags
 typedef struct 	s_file
 {
 	char				type;			// Type of file
-    char				fname[256];		// File name 256 max length
-	char				path[4096];			// Ruta del archivo o directorio 4096 max length
+    char				fname[MAX_NAME];		// File name 256 max length
+	char				path[MAX_PATH];			// Ruta del archivo o directorio 4096 max length
 	nlink_t				nlink;			// número de links
+	ino_t				inode;			// Número de inodo
+	char				link[MAX_NAME];			// Enlace simbólico
     off_t				size;			// Tamaño del archivo
     mode_t				permissions;	// Permisos del archivo
 	char				str_perm[11];		// Permisos en formato string
@@ -56,6 +58,7 @@ typedef struct 	s_file
 typedef struct	s_content
 {
 	char					name[256];
+	int 					blk_total;
 	struct s_file			*file_description;
 	struct s_content		*subdir;
 	struct s_content		*begin;

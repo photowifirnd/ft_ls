@@ -14,36 +14,62 @@
 void ft_print_description(t_file *file_description){
     char *date;
     date = ft_strtrim(file_description->date, "\n");
-
+    char *width;
+    width = ft_itoa(size_len);
     //ft_printf("%c", file_description->type);
     ft_printf("%s ", file_description->str_perm);
     ft_printf("%d ", file_description->nlink);
     ft_printf("%s ", file_description->str_owner);
     ft_printf("%s ", file_description->str_group);
-    ft_printf("%d ", file_description->size);
+    ft_printf("%*d ", ft_strlen(width), file_description->size);
     ft_printf("%s ", date);
     ft_printf("%s\n", file_description->fname);
 
     ft_free_alloc(date);
+    ft_free_alloc(width);
 }
+//print files in the container, not directories: intended for files passed as arguments
+void ft_print_container(t_content **container, t_flags flags){
+    t_content *current = *container;
+    
+    while ( current != NULL)
+    {
+        if (current->file_description->type != 'd')
+        {
+            if (!flags.is_flag)
+            {
+                ft_printf("%s ", current->file_description->fname);
+            }
+            else if (flags.is_flag && flags.l)
+            {
+                ft_print_description(current->file_description);
+            }
+        }
+        current = current->next;
+    }
+}
+//print files and directories in the given container: Intended for listing subdir content
 void ft_print_subdir(t_content **subdir)
 {
     t_content *current = *subdir;
     while (current != NULL)
     {
-        ft_printf("Checking file description - >%s\n", current->file_description->fname);
         ft_print_description(current->file_description);
         current = current->next;
     }
 }
 int ft_print_info_file(t_content **entry, t_flags flags)
 {
+    t_content *current;
     t_file *file_description;
 
     if (entry == NULL || *entry == NULL){
         return (SUCCESS);
 	}
-    t_content *current = (*entry)->begin;
+    current = (*entry)->begin;
+    ft_print_container(entry, flags);
+    ft_printf("\n");
+    current = (*entry)->begin;
 
     while (current != NULL)
     {
@@ -55,43 +81,33 @@ int ft_print_info_file(t_content **entry, t_flags flags)
             current = current->next;
             continue;
         }
-
         // Handle the -l flag: Print detailed information
         if (flags.l)
         {
-			t_content *subdir = current->subdir;
-			ft_print_description(file_description);
-			ft_print_subdir(&subdir);
+            if (current->file_description->type == 'd')
+            {
+                ft_printf("%s:\n", current->file_description->fname);
+                ft_printf("total: %d\n", current->blk_total);
+            }
+            ft_print_subdir(&current->subdir);
         }
         else
         {
-			//here you have to make a distinction between files and directories, if it is only one directory,
-			// you have to print the files inside it
-			// if it is a file, you have to print the file name
-			// if there are several directories, you have to print the directory name: and the files inside it
-			//this will be done outside of functrion, by calling print i.e. inside main function
-            // Print only the file name if -l is not set
-			ft_printf("Entering on else print with no flags:\n");
-            t_content *subdir = current->subdir->begin;
-            ft_printf("Checking file description - >");
-            ft_printf("--->%s\n", file_description->fname);
-			while (subdir != NULL){
-				if (!flags.a && subdir->file_description->fname[0] == '.')
-				{
-					subdir = subdir->next;
-					continue;
-				}else {
-					ft_printf("%s ", subdir->file_description->fname);
-					subdir = subdir->next;
-				}
-                /* ft_printf("%s ", subdir->name);
-                subdir = subdir->next; */
-			}
-			ft_printf("\n");
+            if (current->subdir != NULL)
+            {
+                ft_printf("\n%s:\n",current->file_description->fname);
+                t_content *subdir = current->subdir->begin;
+                while (subdir != NULL){
+                   
+                    ft_printf("%s ", subdir->file_description->fname);
+                    subdir = subdir->next;
+                }
+                ft_printf("\n");
+            }
         }
-
         current = current->next;
     }
+	//ft_printf("\n");
 
     return (SUCCESS);
 }
