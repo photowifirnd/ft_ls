@@ -26,6 +26,13 @@
 # include "constants.h"
 
 extern off_t size_len;
+typedef struct s_columns
+{
+	nlink_t		nlink;
+	int		owner;
+	int		group;
+	off_t		size;
+} t_columns;
 typedef struct		s_flags
 {
 	int				l;
@@ -77,7 +84,7 @@ int ft_query_dir(t_content **container);
 int ft_set_file_description(const char *path, struct stat file_stat , t_content **container);
 void ft_set_str_permissions(mode_t st_mode, char *str_perm);
 int ft_print_info_file(t_content **entry, t_flags flags);
-void ft_print_subdir(t_content **subdir);
+void ft_print_subdir(t_content **subdir, t_flags flags);
 int ft_open_directory(char *path, t_content *entry);
 int ft_fill_content_dir(t_content **content_dir, const char *path);
 

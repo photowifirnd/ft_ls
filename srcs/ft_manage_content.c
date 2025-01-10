@@ -48,26 +48,42 @@ t_content *new_container(void)
 int add_new_node(t_content **container, const char *name)
 {
     t_content *current_node;
-    
-    if (!name || !ft_strlen(name))
+    t_content *new_node;
+
+    if (!name || !ft_strlen(name)){
         return EXIT_FAILURE;
+	}
+	/* if (ft_check_file(container, name) == 0)
+	{
+		return EXIT_SUCCESS;
+	} */
+	if (!(new_node = new_container()))
+		return (EXIT_FAILURE);
+	ft_strcpy(new_node->name, name);
     if (!(*container))
     {
-        if (!(*container = new_container()))
-		    return (EXIT_FAILURE);
-        ft_strcpy((*container)->name, name);
-    } else {
-		if (ft_check_file(container, name) == 0)
-		{
-			return EXIT_SUCCESS;
-		}
-        current_node = (*container)->end;///Here seems to be the problem when passing subdirs. CHECK THIS!!!
-        if (!(current_node->next = new_container()))
-            return (EXIT_FAILURE);
-        current_node->next->prev = current_node;
-        current_node = current_node->next;
+        *container = new_node;
+    }
+	else
+	{
+		current_node = (*container)->end;
+		current_node->next = new_node;
+		new_node->prev = current_node;
+		/* new_node->prev = current_node;
+		new_node->begin = (*container)->begin; */
+		
+		
+		/* current_node->next->prev = current_node;
+        current_node->end = current_node->next;
+		current_node = current_node->next;
         ft_strcpy(current_node->name, name);
-        (*container)->end = current_node;
+		current_node->begin = (*container)->begin; */
+        //(*container)->end = current_node;
+		current_node = (*container)->begin;
+		while (current_node != NULL){
+			current_node->end = new_node;
+			current_node = current_node->next;
+		}
     }
    return EXIT_SUCCESS;
 }
@@ -87,10 +103,10 @@ int insert_subdir_node(t_content **subdir, const char *name)
     }
 	//ft_printf("Inserting new subdir %s\n", name);
     current_node = (*subdir)->begin;
-	if (ft_check_file(subdir, name) == 0)
+	/* if (ft_check_file(subdir, name) == 0)
 	{
 		return EXIT_SUCCESS;
-	}
+	} */
     while (current_node != NULL && ft_strcmp(current_node->name, name) < 0)
     {
         current_node = current_node->next;
@@ -116,9 +132,9 @@ int insert_subdir_node(t_content **subdir, const char *name)
 	}
 	else if (current_node == *subdir) //Insert at the begining
 	{
-		//ft_printf("Inserting at the begining\n");
-		current_node->prev = new_node;
-		current_node->begin = new_node;
+		//ft_printf("Inserting at the begining -> %s\n", name);
+		/* current_node->prev = new_node;
+		current_node->begin = new_node; */
 		new_node->next = current_node;
 		new_node->end = new_node->next->end;
 		new_node->next->prev = new_node;
@@ -140,8 +156,6 @@ int insert_subdir_node(t_content **subdir, const char *name)
 		new_node->prev = current_node->prev;
 		current_node->prev = new_node;
 		new_node->prev->next = new_node;
-
-		
 	}
 	
 	return EXIT_SUCCESS;
@@ -158,6 +172,7 @@ void free_content_dir(t_content **container)
     while (current != NULL)
     {
         if (current->file_description != NULL) {
+			ft_free_alloc(current->file_description->date);
             free(current->file_description);
         }
         next = current->next;

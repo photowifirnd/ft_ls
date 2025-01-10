@@ -98,13 +98,13 @@ int ft_set_sub_file_description(const char *path, struct stat file_stat, t_conte
     current_node->file_description->permissions = file_stat.st_mode;
     current_node->file_description->owner = file_stat.st_uid;
     current_node->file_description->group = file_stat.st_gid;
-    current_node->file_description->timestamp = file_stat.st_atime;
-    current_node->file_description->date = ctime(&file_stat.st_atime);
+    current_node->file_description->timestamp = file_stat.st_mtime;
+    current_node->file_description->date = ft_strdup(ctime(&file_stat.st_mtime));
     current_node->file_description->blocks = file_stat.st_blocks;
     current_node->file_description->block_size = file_stat.st_blksize;
     ft_set_ids(file_stat, current_node);
     ft_set_type(file_stat, current_node);
-
+   
     // Debug prints
     /* ft_printf("Current node: %s\n", current_node->name);
     ft_printf("File description set for %s\n", current_node->file_description->fname);
@@ -113,7 +113,7 @@ int ft_set_sub_file_description(const char *path, struct stat file_stat, t_conte
     ft_printf("Group: %s\n", current_node->file_description->str_group);
     ft_printf("Size: %lld\n", current_node->file_description->size);
     ft_printf("Date: %s\n", current_node->file_description->date); */
-    return 0;
+    return EXIT_SUCCESS;
 }
 /**
  * @brief Function to set the file description
@@ -136,13 +136,14 @@ int ft_set_file_description(const char *path, struct stat file_stat, t_content *
     current_node->file_description->permissions = file_stat.st_mode;
     current_node->file_description->owner = file_stat.st_uid;
     current_node->file_description->group = file_stat.st_gid;
-    current_node->file_description->timestamp = file_stat.st_atime;
-    current_node->file_description->date = ctime(&file_stat.st_atime);
+    current_node->file_description->timestamp = file_stat.st_mtime;
+
+    current_node->file_description->date = ft_strdup(ctime(&file_stat.st_mtime));
     current_node->file_description->blocks = file_stat.st_blocks;
     current_node->file_description->block_size = file_stat.st_blksize;
     ft_set_ids(file_stat, current_node);
     ft_set_type(file_stat, current_node);
-
+   
     // Debug prints
     /* ft_printf("Current node: %s\n", current_node->name);
     ft_printf("File description set for %s\n", current_node->file_description->fname);
@@ -151,17 +152,31 @@ int ft_set_file_description(const char *path, struct stat file_stat, t_content *
     ft_printf("Group: %s\n", current_node->file_description->str_group);
     ft_printf("Size: %lld\n", current_node->file_description->size);
     ft_printf("Date: %s\n", current_node->file_description->date); */
-    return 0;
+    return EXIT_SUCCESS;
 }
 /**
  * @brief Function to get full path of a file
  */
 void ft_get_full_path(char *full_path, const char *path, const char *name)
 {
+   /*  ft_printf("Getting full path for %s\n", name);
+    ft_printf("Path: %s\n", path); */
+    
+    if (path && path[ft_strlen(path) - 1] != '/')
+    {
+        /* ft_printf("Path does not end with /\n"); */
+        ft_strcpy(full_path, path);
+        ft_strcat(full_path, "/");
+        if (name && ft_strlen(name) > 0){
+            ft_strcat(full_path, name);
+        }
+        return ;
+    }
+    
     if (ft_strcmp(path, ".") == 0){
         ft_strcpy(full_path, path);
         ft_strcat(full_path, "/");
-    }else{
+    }else {
         ft_strcpy(full_path, path);
     }
     ft_strcat(full_path, name);
@@ -228,7 +243,6 @@ int ft_query_file(char **search, int search_count, t_content **container)
     while (i < search_count)
     {
         struct stat file_stat;
-        
         if (lstat(search[i], &file_stat) == -1) {
             ft_deny_access(search[i]); //catch error to global var and return it at the exit program
         } else {
@@ -241,7 +255,6 @@ int ft_query_file(char **search, int search_count, t_content **container)
                 return EXIT_FAILURE;
             }
         }
-        
         i++;
     }
     /* ft_printf("*******************\n");
@@ -253,12 +266,12 @@ int ft_query_file(char **search, int search_count, t_content **container)
         ft_printf("Permissions: %s\n", current->file_description->str_perm);
         ft_printf("Owner: %s\n", current->file_description->str_owner);
         ft_printf("Group: %s\n", current->file_description->str_group);
-        ft_printf("Size: %lld\n", current->file_description->size);
+        ft_printf("Size: %d\n", current->file_description->size);
         ft_printf("Date: %s\n", current->file_description->date);
         current = current->next;
     }
     ft_printf("*******************\n"); */
-    //ft_printf("Size we must use to format size of file: %d\n", size_len);
+    
     return (EXIT_SUCCESS);
 }
 /**
@@ -268,7 +281,6 @@ int ft_query_dir(t_content **container){
     char full_path[4096];
     t_content *subdir;
     t_content *current = (*container);
-
     ft_bzero(full_path, 4096);
     if (current->file_description->type == 'd')
     {
@@ -283,7 +295,22 @@ int ft_query_dir(t_content **container){
             ft_fill_description(full_path, &subdir);
             current->blk_total += subdir->file_description->blocks;
             subdir = subdir->next;
-        } 
+        }
+       
     }
+    /* ft_printf("*******************\n");
+    current = (*container)->subdir->begin;
+    while (current != NULL)
+    {
+        ft_printf("Current node: %s\n", current->name);
+        ft_printf("File description set for %s\n", current->file_description->fname);
+        ft_printf("Permissions: %s\n", current->file_description->str_perm);
+        ft_printf("Owner: %s\n", current->file_description->str_owner);
+        ft_printf("Group: %s\n", current->file_description->str_group);
+        ft_printf("Size: %d\n", current->file_description->size);
+        ft_printf("Date: %s\n", current->file_description->date);
+        current = current->next;
+    }
+    ft_printf("*******************\n"); */
     return EXIT_SUCCESS;
 }
