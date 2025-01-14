@@ -14,6 +14,7 @@
 
 
 off_t size_len = 0;
+
 /**
  * @brief Function to set the permissions of a file
  */
@@ -39,7 +40,8 @@ int ft_deny_access(const char *path) {
     write(2, "ft_ls: cannot open directory ", 29);
     write(2, path, ft_strlen(path));
     write(2, ": Permission denied\n", 21);
-    return 2;
+    var_error = 2; //Substitute this for a global variable Constant lile ACCESS_DENIED
+    return var_error;
 }
 /**
  * @brief Function to set the type of a file
@@ -88,7 +90,7 @@ int ft_set_sub_file_description(const char *path, struct stat file_stat, t_conte
     ft_bzero(current_node->file_description->link, MAX_NAME);
     ft_strncpy(current_node->file_description->fname, current_node->name, sizeof(current_node->name) - 1);
     ft_set_str_permissions(file_stat.st_mode, current_node->file_description->str_perm);
-    ft_bzero(current_node->file_description->path, MAX_NAME);
+    ft_bzero(current_node->file_description->path, MAX_PATH);
     ft_strcpy(current_node->file_description->path, path);
     current_node->file_description->inode = file_stat.st_ino;
     readlink(path, current_node->file_description->link, MAX_NAME);
@@ -118,12 +120,12 @@ int ft_set_sub_file_description(const char *path, struct stat file_stat, t_conte
 /**
  * @brief Function to set the file description
  */
-int ft_set_file_description(const char *path, struct stat file_stat, t_content **container) {
+int ft_set_file_description(const char *path, struct stat file_stat, t_content *container) {
     t_content *current_node;
 
-    if (!(*container))
+    if (!(container))
         return 2;
-    current_node = ((*container)->end);
+    current_node = ((container)->end);
     if (!(current_node->file_description = (t_file *)ft_calloc(1, sizeof(t_file))))
         return 2;
     ft_strncpy(current_node->file_description->fname, current_node->name, sizeof(current_node->name) - 1);
@@ -173,10 +175,10 @@ void ft_get_full_path(char *full_path, const char *path, const char *name)
         return ;
     }
     
-    if (ft_strcmp(path, ".") == 0){
+   /*  if (ft_strcmp(path, ".") == 0){
         ft_strcpy(full_path, path);
         ft_strcat(full_path, "/");
-    }else {
+    }else  */{
         ft_strcpy(full_path, path);
     }
     ft_strcat(full_path, name);
@@ -210,26 +212,59 @@ int ft_fill_description(char *path, t_content **container)
 /**
  * @brief Function to fill the content of a directory
  */
-int ft_fill_content_dir(t_content **content_dir, const char *path)
+int ft_fill_content_dir(t_content **content_dir, const char *path, t_flags flags)
 {
+    char full_path[4096];
     DIR *dir;
     struct dirent *sdir;
     t_content *current = (*content_dir);
+    t_content *new_node;
     
     if (!(dir = opendir(path))) {
         return ft_deny_access(path);
     }
     while ((sdir = readdir(dir)) != NULL)
     {
+        /* subdir = (*container)->begin->subdir->begin;
+        while (subdir != NULL)
+        {
+            ft_get_full_path(full_path, (*container)->name, subdir->name);
+            ft_fill_description(full_path, &subdir);
+            current->blk_total += subdir->file_description->blocks;
+            subdir = subdir->next;
+        } */
+         
         // Skip the current and parent directory entries
         if (ft_strcmp(sdir->d_name, ".") == 0 || ft_strcmp(sdir->d_name, "..") == 0)
             continue;
+        ft_get_full_path(full_path, (*content_dir)->name, sdir->d_name);
+        new_node = new_container(sdir->d_name);
+        ft_fill_description(full_path, &new_node);
+        current->blk_total += new_node->file_description->blocks;
         // Add the directory entry name to the content list
-        if (insert_subdir_node(&current->subdir, sdir->d_name) == EXIT_FAILURE) {//CHECK if fails return to add_new_node
+        if (flags.t){
+            if (ft_add_new_node_by_time(&current->subdir, new_node) == EXIT_FAILURE)
+            {
+                ft_printf("Failed to add new node for %s\n", sdir->d_name);
+                closedir(dir);
+                return EXIT_FAILURE;
+            }
+        }
+        else
+        {
+            if (ft_add_new_node_alphanumeric(&current->subdir, new_node) == EXIT_FAILURE)
+            {
+                ft_printf("Failed to add new node for %s\n", sdir->d_name);
+                closedir(dir);
+                return EXIT_FAILURE;
+            } 
+        }
+        /*
+        if (insert_subdir_node(&current->subdir, sdir->d_name) == EXIT_FAILURE) {
             ft_printf("Failed to add new node for %s\n", sdir->d_name);
             closedir(dir);
             return EXIT_FAILURE;
-        }
+        } */
     }
     closedir(dir);
     return EXIT_SUCCESS;
@@ -237,65 +272,65 @@ int ft_fill_content_dir(t_content **content_dir, const char *path)
 /**
  * @brief Function to query a file
  */
-int ft_query_file(char **search, int search_count, t_content **container)
+int ft_query_file(char **search, int search_count, t_content **container, t_flags flags)
 {
+    t_content *new_node;
 	int i = 0;
+
+   
     while (i < search_count)
     {
         struct stat file_stat;
         if (lstat(search[i], &file_stat) == -1) {
-            ft_deny_access(search[i]); //catch error to global var and return it at the exit program
+            var_error = ft_deny_access(search[i]); //catch error to global var and return it at the exit program
         } else {
-            if (add_new_node(container, search[i]) == EXIT_FAILURE) {
-                ft_printf("Failed to add new node for %s\n", search[i]);
-                return EXIT_FAILURE;
-            }
-            if (ft_set_file_description(search[i], file_stat, container) != 0) {
+            new_node = new_container(search[i]);
+            if (ft_set_file_description(search[i], file_stat,  new_node) != 0) {
                 ft_printf("Failed to set file description for %s\n", search[i]);
                 return EXIT_FAILURE;
+            }
+            if (flags.t == 0)
+            {
+                if (add_new_node(container, new_node) == EXIT_FAILURE) {//maybe withou the & symbol
+                    ft_printf("Failed to add new node for %s\n", search[i]);
+                    return EXIT_FAILURE;
+                }
+            }
+            else
+            {
+                if (ft_add_new_node_by_time(container, new_node) == EXIT_FAILURE) {
+                    ft_printf("Failed to add new node for %s\n", search[i]);
+                    return EXIT_FAILURE;
+                }
             }
         }
         i++;
     }
-    /* ft_printf("*******************\n");
-    t_content *current = (*container)->begin;
-    while (current != NULL)
-    {
-        ft_printf("Current node: %s\n", current->name);
-        ft_printf("File description set for %s\n", current->file_description->fname);
-        ft_printf("Permissions: %s\n", current->file_description->str_perm);
-        ft_printf("Owner: %s\n", current->file_description->str_owner);
-        ft_printf("Group: %s\n", current->file_description->str_group);
-        ft_printf("Size: %d\n", current->file_description->size);
-        ft_printf("Date: %s\n", current->file_description->date);
-        current = current->next;
-    }
-    ft_printf("*******************\n"); */
-    
-    return (EXIT_SUCCESS);
+    return (var_error);
 }
 /**
  * @brief Function to query a directory
  */
-int ft_query_dir(t_content **container){
+int ft_query_dir(t_content **container, t_flags flags){
     char full_path[4096];
-    t_content *subdir;
+    //t_content *subdir;
     t_content *current = (*container);
     ft_bzero(full_path, 4096);
+
     if (current->file_description->type == 'd')
     {
-        if (ft_fill_content_dir(&current, current->file_description->fname) != EXIT_SUCCESS)
+        if (ft_fill_content_dir(&current, current->file_description->fname, flags) != EXIT_SUCCESS)
         {
             return EXIT_FAILURE;
         }
-        subdir = (*container)->begin->subdir->begin;
+/*         t_content *subdir = (*container)->begin->subdir->begin;
         while (subdir != NULL)
         {
             ft_get_full_path(full_path, (*container)->name, subdir->name);
             ft_fill_description(full_path, &subdir);
             current->blk_total += subdir->file_description->blocks;
             subdir = subdir->next;
-        }
+        } */
        
     }
     /* ft_printf("*******************\n");

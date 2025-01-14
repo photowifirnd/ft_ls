@@ -55,7 +55,9 @@ void ft_print_description(t_file *file_description, t_columns columns)
     ft_printf("%-*s ", columns.owner, file_description->str_owner);
     ft_printf("%-*s ", columns.group, file_description->str_group);
     ft_printf("%*d ", columns.size, file_description->size);
+    
     ft_printf("%s ", date);
+    ft_printf(">>>> %d ", file_description->timestamp);
     if (file_description->type == 'l')
     {
         ft_printf("%s -> %s\n", file_description->fname, file_description->link);
@@ -93,11 +95,15 @@ void ft_print_subdir(t_content **subdir, t_flags flags)
     t_content *current;
     t_columns columns;
 
-    ///SOMETHING IS WRONG HERE. CHECK IF INSERTION IS SETTING END AND BEGIN CORRECTLY
-    current = (flags.r) ? (*subdir)->end : (*subdir);
+    current = (flags.r) ? (*subdir)->end : (*subdir)->begin;
     ft_calculate_widths(&columns, subdir);
     while (current != NULL)
     {
+        if (current->name[0] == '.' && !flags.a)
+        {
+            current = (flags.r) ? current->prev : current->next;
+            continue;
+        }
         ft_print_description(current->file_description, columns);
         current = (flags.r) ? current->prev : current->next;
     }
@@ -105,7 +111,7 @@ void ft_print_subdir(t_content **subdir, t_flags flags)
 int ft_print_info_file(t_content **entry, t_flags flags)
 {
     t_content *current;
-    t_file *file_description;
+    //t_file *file_description;
     t_columns columns;
 
     ft_calculate_widths(&columns, entry);
@@ -122,14 +128,14 @@ int ft_print_info_file(t_content **entry, t_flags flags)
 
     while (current != NULL)
     {
-        file_description = current->file_description;
+        /* file_description = current->file_description;
 
         // Handle the -a flag: Skip hidden files if -a is not set
         if (!flags.a && file_description->fname[0] == '.' && ft_strlen(file_description->fname) > 1)
         {
             current = current->next;
             continue;
-        }
+        } */
         // Handle the -l flag: Print detailed information
         if (flags.l)
         {
@@ -138,7 +144,8 @@ int ft_print_info_file(t_content **entry, t_flags flags)
                 ft_printf("\n%s:\n", current->file_description->fname);
                 ft_printf("total: %d\n", current->blk_total);
             }
-            if (current->subdir != NULL){
+            if (current->subdir != NULL)
+            {
                 ft_print_subdir(&current->subdir, flags);
             }
         }
@@ -150,7 +157,11 @@ int ft_print_info_file(t_content **entry, t_flags flags)
                 ft_printf("\n%s:\n",current->file_description->fname);
                 subdir = (flags.r) ? current->subdir->end : current->subdir->begin;
                 while (subdir != NULL){
-                   
+                    if (subdir->name[0] == '.' && !flags.a)
+                    {
+                        subdir = (flags.r) ? subdir->prev : subdir->next;
+                        continue;
+                    }
                     ft_printf("%s ", subdir->file_description->fname);
                     subdir = (flags.r) ? subdir->prev : subdir->next;
                 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_ls.h"
-
+int var_error = 0;
 void execute_function(func_ptr_t func, int arg)
 {
     if (func != NULL)
@@ -24,36 +24,39 @@ int main(int args, char *argv[])
 	t_flags flags;
 	char **files_to_search = NULL;
 	int file_count;
-	int ret;
-
+	
 	file_count = 0;
-	ret = 0;
- 		
+	 		
 	ft_parse_ft_ls_argv(args, argv, &flags, &files_to_search, &file_count);
 	ft_sortArray(files_to_search, file_count);
 	
 	if (file_count > 0)
-		ret = ft_query_file(files_to_search, file_count, &container);
-	t_content *current = ft_get_container_head(container);
-	if (current != NULL && current->name != NULL){
+		var_error = ft_query_file(files_to_search, file_count, &container, flags);
+	//we have to check for container and make sure it is not null. Have in mindo all mallocs and frees
+	if (container != NULL)
+	{
+		t_content *current = ft_get_container_head(container);
 		
+		if (current != NULL && current->name != NULL){
+			
+			while (current != NULL)
+			{
+				ft_query_dir(&current, flags);
+				current = current->next;
+			}
+		}
+		ft_print_info_file(&container, flags);
+		current = ft_get_container_head(container);
 		while (current != NULL)
 		{
-			ft_query_dir(&current);
+			free_content_dir(&current->subdir);
 			current = current->next;
 		}
+		
+		free_content_dir(&container);
 	}
-	ft_print_info_file(&container, flags);
-	current = ft_get_container_head(container);
-	while (current != NULL)
-	{
-		free_content_dir(&current->subdir);
-		current = current->next;
-	}
-	
-	free_content_dir(&container);
 	for (int i = 0; i < file_count; i++)
 		ft_free_alloc(files_to_search[i]);
 	ft_free_alloc(files_to_search); 
-	return (ret);
+	return (var_error);
 }
