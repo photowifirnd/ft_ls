@@ -25,7 +25,6 @@
 # include "ft_printf.h"
 # include "constants.h"
 
-extern off_t size_len;
 extern int var_error;
 typedef struct s_columns
 {
@@ -84,16 +83,16 @@ int ft_query_file(char **search, int search_count, t_content **content, t_flags 
 int ft_query_dir(t_content **container, t_flags flags);
 int ft_set_file_description(const char *path, struct stat file_stat , t_content *container);
 void ft_set_str_permissions(mode_t st_mode, char *str_perm);
-int ft_print_info_file(t_content **entry, t_flags flags);
+int ft_print_info_file(t_content **entry, t_flags flags, int count);
 void ft_print_subdir(t_content **subdir, t_flags flags);
 int ft_open_directory(char *path, t_content *entry);
 int ft_fill_content_dir(t_content **content_dir, const char *path, t_flags flags);
 
 t_content *new_container(const char *name);
-int add_new_node(t_content **head, t_content *new_node);
+int ft_add_new_node(t_content **head, t_content *new_node);
 int ft_add_new_node_alphanumeric(t_content **container, t_content *new_node);
 int ft_add_new_node_by_time(t_content **container, t_content *node);
-int insert_subdir_node(t_content **subdir, const char *name);
+//int insert_subdir_node(t_content **subdir, const char *name);
 t_content *ft_get_container_head(t_content *container);
 void free_content_dir(t_content **container);
 

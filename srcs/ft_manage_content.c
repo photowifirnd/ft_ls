@@ -1,6 +1,5 @@
 #include "ft_ls.h"
 
-
 // Initialize a new t_content_dir structure
 t_content *new_container(const char *name)
 {
@@ -36,14 +35,11 @@ int ft_insert_at_begining(t_content **container, t_content *new_node)
 	else
 	{
 		current_node = (*container)->begin;
-
 		new_node->next = current_node;
 		new_node->end = new_node->next->end;
 		new_node->next->prev = new_node;
 		new_node->next->begin = new_node;
-
 		*container = new_node;
-		
 		current_node = (*container)->begin;
 		while (current_node != NULL){
 			current_node->begin = new_node;
@@ -138,9 +134,13 @@ t_content *ft_get_container_head(t_content *container)
 {
     return container->begin;
 }
-
+//get the end of the container
+t_content *ft_get_container_tail(t_content *container)
+{
+	return container->end;
+}
 // Add a new entry to the t_content_dir list
-int add_new_node(t_content **container, t_content *new_node/* , const char *name */)
+int ft_add_new_node(t_content **container, t_content *new_node/* , const char *name */)
 {
     t_content *current_node;
     
@@ -219,80 +219,6 @@ int ft_add_new_node_by_time(t_content **container, t_content *new_node)
 	}
 	return EXIT_SUCCESS;
 }
-// Insert a new node maintaining the alfanumeric order
-int insert_subdir_node(t_content **subdir, const char *name)
-{
-    t_content *current_node;
-    t_content *new_node;
-    if (!name || !ft_strlen(name))
-        return EXIT_FAILURE;
-    if (!(*subdir))
-    {
-		if (!(*subdir = new_container(name)))
-		    return (EXIT_FAILURE);
-		return EXIT_SUCCESS;
-    }
-	//ft_printf("Inserting new subdir %s\n", name);
-    current_node = (*subdir)->begin;
-	/* if (ft_check_file(subdir, name) == 0)
-	{
-		return EXIT_SUCCESS;
-	} */
-    while (current_node != NULL && ft_strcmp(current_node->name, name) < 0)
-    {
-        current_node = current_node->next;
-    }
-	if (!(new_node = new_container(name)))
-			return (EXIT_FAILURE);
-	if (current_node == NULL) //Insert at the end
-	{
-		//ft_printf("Inserting at the end\n");
-		ft_insert_at_ending(subdir, new_node);
-		/* t_content *last = (*subdir)->end;
-		last->next = new_node;
-        new_node->prev = last;
-		new_node->end = new_node;
-        new_node->begin = (*subdir)->begin;
-		
-		current_node = (*subdir)->begin;
-		while (current_node != NULL){
-        	current_node->end = new_node;
-			current_node = current_node->next;
-		} */
-		
-	}
-	else if (current_node == *subdir) //Insert at the begining
-	{
-		//ft_printf("Inserting at the begining -> %s\n", name);
-		/* current_node->prev = new_node;
-		current_node->begin = new_node; */
-		ft_insert_at_begining(subdir, new_node);
-		/* new_node->next = current_node;
-		new_node->end = new_node->next->end;
-		new_node->next->prev = new_node;
-		new_node->next->begin = new_node;
-
-		(*subdir) = new_node;
-		current_node = (*subdir)->begin;
-		while (current_node != NULL){
-			//ft_printf("set begining of %s\n", current_node->name);
-        	current_node->begin = new_node;
-			current_node = current_node->next;
-		} */
-	} 
-	else //before current_node Insrtion in the middle
-	{
-		ft_insert_in_between(&current_node, new_node);
-		/* new_node->end = (*subdir)->end;
-		new_node->begin = (*subdir)->begin;
-		new_node->next = current_node;
-		new_node->prev = current_node->prev;
-		current_node->prev = new_node;
-		new_node->prev->next = new_node; */
-	}
-	return EXIT_SUCCESS;
-}
-
 // Free the t_content_dir list
 void free_content_dir(t_content **container)
 {
@@ -312,3 +238,42 @@ void free_content_dir(t_content **container)
         current = next;
     }
 }
+/**************************************************************** */
+/* // Insert a new node maintaining the alfanumeric order
+int insert_subdir_node(t_content **subdir, const char *name)
+{
+    t_content *current_node;
+    t_content *new_node;
+    if (!name || !ft_strlen(name))
+        return EXIT_FAILURE;
+    if (!(*subdir))
+    {
+		if (!(*subdir = new_container(name)))
+		    return (EXIT_FAILURE);
+		return EXIT_SUCCESS;
+    }
+	//ft_printf("Inserting new subdir %s\n", name);
+    current_node = (*subdir)->begin;
+    while (current_node != NULL && ft_strcmp(current_node->name, name) < 0)
+    {
+        current_node = current_node->next;
+    }
+	if (!(new_node = new_container(name)))
+			return (EXIT_FAILURE);
+	if (current_node == NULL) //Insert at the end
+	{
+		//ft_printf("Inserting at the end\n");
+		ft_insert_at_ending(subdir, new_node);
+	}
+	else if (current_node == *subdir) //Insert at the begining
+	{
+		//ft_printf("Inserting at the begining -> %s\n", name);
+		ft_insert_at_begining(subdir, new_node);
+	} 
+	else //before current_node Insrtion in the middle
+	{
+		ft_insert_in_between(&current_node, new_node);
+	}
+	return EXIT_SUCCESS;
+}
+ */

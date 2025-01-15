@@ -11,13 +11,7 @@
 /* ************************************************************************** */
 #include "ft_ls.h"
 int var_error = 0;
-void execute_function(func_ptr_t func, int arg)
-{
-    if (func != NULL)
-    {
-        func(arg);
-    }
-}
+
 int main(int args, char *argv[])
 {
 	t_content *container = NULL;
@@ -45,7 +39,7 @@ int main(int args, char *argv[])
 				current = current->next;
 			}
 		}
-		ft_print_info_file(&container, flags);
+		ft_print_info_file(&container, flags, file_count);
 		current = ft_get_container_head(container);
 		while (current != NULL)
 		{
