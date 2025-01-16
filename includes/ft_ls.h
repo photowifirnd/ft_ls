@@ -87,6 +87,10 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count);
 void ft_print_subdir(t_content **subdir, t_flags flags);
 int ft_open_directory(char *path, t_content *entry);
 int ft_fill_content_dir(t_content **content_dir, const char *path, t_flags flags);
+int ft_deny_access(const char *path);
+void ft_get_full_path(char *full_path, const char *path, const char *name);
+int ft_fill_description(char *path, t_content **container);
+void ft_calculate_widths(t_columns *columns, t_content **subdir);
 
 t_content *new_container(const char *name);
 int ft_add_new_node(t_content **head, t_content *new_node);
@@ -95,5 +99,8 @@ int ft_add_new_node_by_time(t_content **container, t_content *node);
 //int insert_subdir_node(t_content **subdir, const char *name);
 t_content *ft_get_container_head(t_content *container);
 void free_content_dir(t_content **container);
+
+void ft_get_recursive_dir_content(t_content **container, const char *path, t_flags flags);
+void ft_recursive(t_content *dir, t_flags flags);
 
 #endif

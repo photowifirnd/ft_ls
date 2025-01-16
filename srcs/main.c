@@ -40,6 +40,7 @@ int main(int args, char *argv[])
 			}
 		}
 		ft_print_info_file(&container, flags, file_count);
+		//ft_recursive(&(*container), flags);
 		current = ft_get_container_head(container);
 		while (current != NULL)
 		{

@@ -81,6 +81,7 @@ int ft_print_files_in_args(t_content **container, t_flags flags, t_columns colum
     {
         if (current->file_description->type != 'd')
         {
+        //ft_printf("Current file: %s\n", current->name);
             if (flags.is_flag && flags.l)
             {
                 ft_print_description(current->file_description, columns);
@@ -101,7 +102,7 @@ int ft_print_files_in_args(t_content **container, t_flags flags, t_columns colum
     current = tmp->begin;
     while (current != NULL)
     {
-        ft_printf("%s", current->name);
+        ft_printf("-->%s", current->name);
         if (current->next != NULL)
         {
             ft_printf("  ");
@@ -117,7 +118,7 @@ void ft_print_subdir(t_content **subdir, t_flags flags)
 {
     t_content *current;
     t_columns columns;
-
+    
     current = (flags.r) ? (*subdir)->end : (*subdir)->begin;
     ft_calculate_widths(&columns, subdir);
     while (current != NULL)
@@ -211,6 +212,19 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count)
                 {
                     ft_printf("\n");
                 }
+            }
+            if (flags.R && current->subdir != NULL)
+            {
+                
+                ft_recursive(current, flags);
+                /* ft_printf("current->name: %s\n", current->name);
+                t_content *r_subdir = current->subdir->begin;
+                ft_printf("current->subdir->name: %s\n", r_subdir->name);
+                
+                ft_get_recursive_dir_content(&r_subdir, current->file_description->path, flags);
+                //ft_printf("After recursive call\n");
+                //ft_print_subdir(&r_subdir, flags);
+                //ft_printf("After print info file inside R flag\n"); */
             }
         }
         current = (flags.r) ? current->prev : current->next;
