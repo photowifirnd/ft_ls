@@ -13,6 +13,40 @@
 #include "ft_ls.h"
 
 /**
+ * @brief Function to set date of a file if file is lower than 6 months old or greater than 6 months old
+ */
+char *ft_set_date(time_t timestamp)
+{
+    time_t current_time;
+    time_t file_time;
+    time_t diff_time;
+    time_t six_months = 15778463; // Approximately six months in seconds
+    char date[20]; // Buffer to hold the formatted date
+
+    ft_bzero(date, 20);
+    current_time = time(NULL);
+    file_time = timestamp;
+    diff_time = current_time - file_time;
+
+    // Format the date based on the difference in time
+    if (diff_time < six_months)
+    {
+        // Format the date as "Month Day Hour:Minute"
+        ft_strcpy(date, ctime(&file_time) + 4);
+        date[12] = '\0';
+    }
+    else
+    {
+        // Format the date as "Month Day  Year"
+        ft_strncpy(date, ctime(&file_time) + 4, 7);
+        ft_strncpy(date + 7, ctime(&file_time) + 19, 5);
+        date[12] = '\0';
+    }
+
+    return ft_strdup(date);
+}
+
+/**
  * @brief Function to set the permissions of a file
  */
 void ft_set_str_permissions(mode_t st_mode, char *str_perm) {
@@ -97,7 +131,7 @@ int ft_set_sub_file_description(const char *path, struct stat file_stat, t_conte
     current_node->file_description->owner = file_stat.st_uid;
     current_node->file_description->group = file_stat.st_gid;
     current_node->file_description->timestamp = file_stat.st_mtime;
-    current_node->file_description->date = ft_strdup(ctime(&file_stat.st_mtime));
+    current_node->file_description->date = ft_set_date(current_node->file_description->timestamp);//ft_strdup(ctime(&file_stat.st_mtime));
     current_node->file_description->blocks = file_stat.st_blocks;
     current_node->file_description->block_size = file_stat.st_blksize;
     ft_set_ids(file_stat, current_node);
@@ -125,7 +159,7 @@ int ft_set_file_description(const char *path, struct stat file_stat, t_content *
     current_node->file_description->owner = file_stat.st_uid;
     current_node->file_description->group = file_stat.st_gid;
     current_node->file_description->timestamp = file_stat.st_mtime;
-    current_node->file_description->date = ft_strdup(ctime(&file_stat.st_mtime));
+    current_node->file_description->date = ft_set_date(current_node->file_description->timestamp);//ft_strdup(ctime(&file_stat.st_mtime));
     current_node->file_description->blocks = file_stat.st_blocks;
     current_node->file_description->block_size = file_stat.st_blksize;
     ft_set_ids(file_stat, current_node);
@@ -137,12 +171,8 @@ int ft_set_file_description(const char *path, struct stat file_stat, t_content *
  */
 void ft_get_full_path(char *full_path, const char *path, const char *name)
 {
-   /*  ft_printf("Getting full path for %s\n", name);
-    ft_printf("Path: %s\n", path); */
-    
     if (path && path[ft_strlen(path) - 1] != '/')
     {
-        /* ft_printf("Path does not end with /\n"); */
         ft_strcpy(full_path, path);
         ft_strcat(full_path, "/");
         if (name && ft_strlen(name) > 0){
@@ -150,13 +180,7 @@ void ft_get_full_path(char *full_path, const char *path, const char *name)
         }
         return ;
     }
-    
-   /*  if (ft_strcmp(path, ".") == 0){
-        ft_strcpy(full_path, path);
-        ft_strcat(full_path, "/");
-    }else  */{
-        ft_strcpy(full_path, path);
-    }
+    ft_strcpy(full_path, path);
     ft_strcat(full_path, name);
 }
 /**
@@ -178,9 +202,8 @@ struct stat ft_get_file_stat(char *file_path)
 int ft_fill_description(char *path, t_content **container)
 {
     struct stat file_stat = ft_get_file_stat(path);
-    
     if (file_stat.st_mode == 0 || ft_set_sub_file_description(path, file_stat, container) != 0) {
-        ft_printf("Failed to set file description for %s\n", (*container)->file_description->path);
+        ft_printf("Failed to set file description for %s\n", path);
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
@@ -190,7 +213,7 @@ int ft_fill_description(char *path, t_content **container)
  */
 int ft_fill_content_dir(t_content **content_dir, const char *path, t_flags flags)
 {
-    char full_path[4096];
+    char full_path[MAX_PATH];
     DIR *dir;
     struct dirent *sdir;
     t_content *current = (*content_dir);
@@ -206,15 +229,21 @@ int ft_fill_content_dir(t_content **content_dir, const char *path, t_flags flags
             continue;
         ft_get_full_path(full_path, (*content_dir)->name, sdir->d_name);
         new_node = new_container(sdir->d_name);
-        ft_fill_description(full_path, &new_node);
+        if ((ft_fill_description(full_path, &new_node)) != EXIT_SUCCESS)
+        {
+            ft_printf("Failed to set file description for %s\n", sdir->d_name);
+            continue;
+            //return EXIT_FAILURE; // Or should continue?
+        }
         current->blk_total += new_node->file_description->blocks;
         // Add the directory entry name to the content list
         if (flags.t){
             if (ft_add_new_node_by_time(&current->subdir, new_node) == EXIT_FAILURE)
             {
                 ft_printf("Failed to add new node for %s\n", sdir->d_name);
-                closedir(dir);
-                return EXIT_FAILURE;
+                continue;
+                //closedir(dir);
+                //return EXIT_FAILURE; // Or should continue?
             }
         }
         else
@@ -222,8 +251,9 @@ int ft_fill_content_dir(t_content **content_dir, const char *path, t_flags flags
             if (ft_add_new_node_alphanumeric(&current->subdir, new_node) == EXIT_FAILURE)
             {
                 ft_printf("Failed to add new node for %s\n", sdir->d_name);
-                closedir(dir);
-                return EXIT_FAILURE;
+                continue;
+                //closedir(dir);
+                //return EXIT_FAILURE; // Or should continue?
             } 
         }
     }
@@ -272,10 +302,8 @@ int ft_query_file(char **search, int search_count, t_content **container, t_flag
  * @brief Function to query a directory
  */
 int ft_query_dir(t_content **container, t_flags flags){
-    char full_path[4096];
     t_content *current = (*container);
 
-    ft_bzero(full_path, 4096);
     if (current->file_description->type == 'd')
     {
         return ft_fill_content_dir(&current, current->file_description->path, flags);

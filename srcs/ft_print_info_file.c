@@ -57,7 +57,7 @@ void ft_print_description(t_file *file_description, t_columns columns)
     ft_printf("%*d ", columns.size, file_description->size);
     
     ft_printf("%s ", date);
-    ft_printf(">>>> %d ", file_description->timestamp);
+    //ft_printf(">>>> %d ", file_description->timestamp);
     if (file_description->type == 'l')
     {
         ft_printf("%s -> %s\n", file_description->fname, file_description->link);
@@ -81,7 +81,6 @@ int ft_print_files_in_args(t_content **container, t_flags flags, t_columns colum
     {
         if (current->file_description->type != 'd')
         {
-        //ft_printf("Current file: %s\n", current->name);
             if (flags.is_flag && flags.l)
             {
                 ft_print_description(current->file_description, columns);
@@ -89,9 +88,7 @@ int ft_print_files_in_args(t_content **container, t_flags flags, t_columns colum
             else
             {
                 new_node = new_container(current->file_description->fname);
-                
                 ft_add_new_node(&tmp, new_node); 
-                //ft_printf("%s", current->file_description->fname);
             }
             ret = 1;
         }
@@ -102,14 +99,13 @@ int ft_print_files_in_args(t_content **container, t_flags flags, t_columns colum
     current = tmp->begin;
     while (current != NULL)
     {
-        ft_printf("-->%s", current->name);
+        ft_printf("%s", current->name);
         if (current->next != NULL)
         {
             ft_printf("  ");
         }
         current = current->next;
     }
-    
     free_content_dir(&tmp);
     return ret;
 }
@@ -158,11 +154,11 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count)
             no_directory = 1;
         }
         // Handle the -l flag: Print detailed information
-        if (flags.l)
+        if (flags.l || (flags.R && flags.l))
         {
             if (current->file_description->type == 'd')
             {
-                if (count > 1){
+                if (count > 1 || flags.R){
                     ft_printf("%s:\n", current->file_description->fname);
                 }
                 ft_printf("total: %d\n", current->blk_total);
@@ -176,6 +172,12 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count)
                     ft_printf("\n");
                 }
             }
+            if (flags.R && current->subdir != NULL)
+            {
+                
+                ft_recursive(current, flags);
+                //ft_printf("Remember to check ret and this is the last thing you modified\n");
+            }
         }
         else
         {
@@ -188,11 +190,23 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count)
                 }
                 ft_printf("%s:\n", current->file_description->fname);
             }
+            else if (current->file_description->type == 'd'&& flags.R)
+            {
+                if (is_new_line == 1)
+                {
+                    ft_printf("\n");
+                    is_new_line = 0;
+                }
+                ft_printf("%s:\n", current->file_description->fname);
+                if (current->subdir == NULL)
+                {
+                    ft_printf("\n");
+                }
+            }
             if (current->subdir != NULL)
             {
                 t_content *subdir;
 
-                /* ft_printf("\n%s:\n",current->file_description->fname); */
                 subdir = (flags.r) ? current->subdir->end : current->subdir->begin;
                 while (subdir != NULL){
                     if (subdir->name[0] == '.' && !flags.a)
@@ -216,15 +230,11 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count)
             if (flags.R && current->subdir != NULL)
             {
                 
-                ft_recursive(current, flags);
-                /* ft_printf("current->name: %s\n", current->name);
-                t_content *r_subdir = current->subdir->begin;
-                ft_printf("current->subdir->name: %s\n", r_subdir->name);
-                
-                ft_get_recursive_dir_content(&r_subdir, current->file_description->path, flags);
-                //ft_printf("After recursive call\n");
-                //ft_print_subdir(&r_subdir, flags);
-                //ft_printf("After print info file inside R flag\n"); */
+                if ((ft_recursive(current, flags)) == EXIT_FAILURE)
+                {
+                    ft_printf("Failed to query directory %s\n", current->name);
+                    return (EXIT_FAILURE);
+                }
             }
         }
         current = (flags.r) ? current->prev : current->next;

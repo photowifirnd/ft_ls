@@ -55,8 +55,8 @@ typedef struct 	s_file
 	char				str_perm[11];		// Permisos en formato string
     uid_t				owner;			// ID del propietario
     gid_t				group;			// ID del grupo
-	char				str_owner[256];			// usuario propietario
-	char				str_group[256];			// grupo propietario
+	char				str_owner[MAX_NAME];			// usuario propietario
+	char				str_group[MAX_NAME];			// grupo propietario
     time_t				timestamp;			// Fecha de modificación
 	char*				date;
 	blkcnt_t			blocks;			// Bloques asignados
@@ -64,7 +64,7 @@ typedef struct 	s_file
 } 				t_file;
 typedef struct	s_content
 {
-	char					name[256];
+	char					name[MAX_PATH];
 	int 					blk_total;
 	struct s_file			*file_description;
 	struct s_content		*subdir;
@@ -101,6 +101,6 @@ t_content *ft_get_container_head(t_content *container);
 void free_content_dir(t_content **container);
 
 void ft_get_recursive_dir_content(t_content **container, const char *path, t_flags flags);
-void ft_recursive(t_content *dir, t_flags flags);
+int ft_recursive(t_content *dir, t_flags flags);
 
 #endif

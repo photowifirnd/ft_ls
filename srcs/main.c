@@ -35,11 +35,20 @@ int main(int args, char *argv[])
 			
 			while (current != NULL)
 			{
-				ft_query_dir(&current, flags);
+				
+				if ((ft_query_dir(&current, flags)) == EXIT_FAILURE)
+				{
+					ft_printf("Failed to query directory %s\n", current->name);
+					return (EXIT_FAILURE);
+				}
 				current = current->next;
 			}
 		}
-		ft_print_info_file(&container, flags, file_count);
+		if ((ft_print_info_file(&container, flags, file_count)) == EXIT_FAILURE)
+		{
+			ft_printf("Failed to print info file\n");
+			return (EXIT_FAILURE);
+		}
 		//ft_recursive(&(*container), flags);
 		current = ft_get_container_head(container);
 		while (current != NULL)
