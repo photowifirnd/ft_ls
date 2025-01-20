@@ -100,60 +100,51 @@ void ft_set_type(struct stat file_stat, t_content *entry) {
  * @brief Function to set the owner and group of a file
  */
 void ft_set_ids(struct stat file_stat, t_content *entry) {
-    struct passwd *pwd = getpwuid(file_stat.st_uid);
+    char *owner = NULL;
+    char *group = NULL;
+    struct passwd *pwd = getpwuid(file_stat.st_gid);
     struct group *grp = getgrgid(file_stat.st_gid);
-    ft_strcpy(entry->file_description->str_owner, pwd->pw_name);
-    ft_strcpy(entry->file_description->str_group, grp->gr_name);
-}
-/**
- * @brief Function to set the file description
- */
-int ft_set_sub_file_description(const char *path, struct stat file_stat, t_content **container) {
-    t_content *current_node = (*container);
 
-    if (!(*container))
-        return 2;
-    
-    if (!(current_node->file_description = (t_file *)ft_calloc(1, sizeof(t_file))))
-        return 2;
-    ft_bzero(current_node->file_description->fname, MAX_NAME);
-    ft_bzero(current_node->file_description->path, MAX_PATH);
-    ft_bzero(current_node->file_description->link, MAX_NAME);
-    ft_strncpy(current_node->file_description->fname, current_node->name, sizeof(current_node->name) - 1);
-    ft_set_str_permissions(file_stat.st_mode, current_node->file_description->str_perm);
-    ft_bzero(current_node->file_description->path, MAX_PATH);
-    ft_strcpy(current_node->file_description->path, path);
-    current_node->file_description->inode = file_stat.st_ino;
-    readlink(path, current_node->file_description->link, MAX_NAME);
-    current_node->file_description->nlink = file_stat.st_nlink;
-    current_node->file_description->size = file_stat.st_size;
-    current_node->file_description->permissions = file_stat.st_mode;
-    current_node->file_description->owner = file_stat.st_uid;
-    current_node->file_description->group = file_stat.st_gid;
-    current_node->file_description->timestamp = file_stat.st_mtime;
-    current_node->file_description->date = ft_set_date(current_node->file_description->timestamp);//ft_strdup(ctime(&file_stat.st_mtime));
-    current_node->file_description->blocks = file_stat.st_blocks;
-    current_node->file_description->block_size = file_stat.st_blksize;
-    ft_set_ids(file_stat, current_node);
-    ft_set_type(file_stat, current_node);
-    return EXIT_SUCCESS;
+    if (pwd == NULL)
+    {
+        owner = ft_itoa(file_stat.st_uid);
+        ft_strcpy(entry->file_description->str_owner, owner);
+        ft_free_alloc(owner);
+    }
+    else
+    {
+        ft_strcpy(entry->file_description->str_owner, pwd->pw_name);
+    }
+    if (grp == NULL)
+    {
+        group = ft_itoa(file_stat.st_gid);
+        ft_strcpy(entry->file_description->str_group, group);
+        ft_free_alloc(group);
+    }
+    else
+    {
+        ft_strcpy(entry->file_description->str_group, grp->gr_name);
+    }
 }
 /**
  * @brief Function to set the file description
  */
 int ft_set_file_description(const char *path, struct stat file_stat, t_content *container) {
     t_content *current_node;
-
     if (!(container))
         return 2;
-    current_node = ((container)->end);
+    current_node = ((container)->end); // Why is this have to be the end of the list?
     if (!(current_node->file_description = (t_file *)ft_calloc(1, sizeof(t_file))))
         return 2;
-    ft_strncpy(current_node->file_description->fname, current_node->name, sizeof(current_node->name) - 1);
-    ft_set_str_permissions(file_stat.st_mode, current_node->file_description->str_perm);
-    ft_bzero(current_node->file_description->path, MAX_NAME);
+    ft_bzero(current_node->file_description->fname, MAX_NAME);
+    ft_bzero(current_node->file_description->link, MAX_NAME);
+    ft_bzero(current_node->file_description->path, MAX_PATH);
+    ft_strcpy(current_node->file_description->fname, current_node->name);
     ft_strcpy(current_node->file_description->path, path);
+    ft_set_str_permissions(file_stat.st_mode, current_node->file_description->str_perm);
     current_node->file_description->nlink = file_stat.st_nlink;
+    current_node->file_description->inode = file_stat.st_ino;
+    readlink(path, current_node->file_description->link, MAX_NAME);
     current_node->file_description->size = file_stat.st_size;
     current_node->file_description->permissions = file_stat.st_mode;
     current_node->file_description->owner = file_stat.st_uid;
@@ -202,7 +193,8 @@ struct stat ft_get_file_stat(char *file_path)
 int ft_fill_description(char *path, t_content **container)
 {
     struct stat file_stat = ft_get_file_stat(path);
-    if (file_stat.st_mode == 0 || ft_set_sub_file_description(path, file_stat, container) != 0) {
+    
+    if (file_stat.st_mode == 0 || ft_set_file_description(path, file_stat, (*container)) != 0) {//take care of this, it was calling to sub_file_description
         ft_printf("Failed to set file description for %s\n", path);
         return EXIT_FAILURE;
     }

@@ -168,7 +168,6 @@ int ft_recursive(t_content *dir, t_flags flags)
             ft_print_info_file(&newNode, flags, 1); // if EXIT_FAILURE, should we continue?
             ft_free_recursive(&newNode);
 		}
-        
 		current = (flags.r) ? current->prev : current->next;
 	}
     return EXIT_SUCCESS;
