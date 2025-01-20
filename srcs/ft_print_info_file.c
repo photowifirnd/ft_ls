@@ -167,9 +167,10 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
             {
                 ft_print_subdir(&current->subdir, flags);
                 //should print new line if there are more directories to print but only if is_new_line is false
-                if (current->next != NULL && current->next->file_description->type == 'd' && !is_new_line)
+                if (!is_recursive && !flags.R && ((!flags.r && current->next != NULL && current->next->file_description->type == 'd' && !is_new_line) ||
+                    (flags.r && current->prev != NULL && current->prev->file_description->type == 'd' && !is_new_line)))
                 {
-                    //ft_printf("\n");
+                    ft_printf("****\n");
                 }
             }
             if (flags.R && current->subdir != NULL)
@@ -229,7 +230,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                 ft_printf("\n");
                 if ((!flags.r && current->next != NULL) || (flags.r && current->prev != NULL && current->prev->file_description->type == 'd'))
                 {
-                    ft_printf("\n");
+                    ft_printf("-\n");// You are here with -R flag prints more than one line
                 }
             }
             if (flags.R && current->subdir != NULL)
@@ -239,6 +240,11 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                 {
                     ft_printf("Failed to query directory %s\n", current->name);
                     return (EXIT_FAILURE);
+                }
+                if ((!flags.r && is_recursive == 0 && current->next != NULL && !no_directory) ||
+                (flags.r && is_recursive == 0 && current->prev != NULL && !no_directory))
+                {
+                    ft_printf("--\n");
                 }
             }
         }
