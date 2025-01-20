@@ -83,7 +83,7 @@ int ft_query_file(char **search, int search_count, t_content **content, t_flags 
 int ft_query_dir(t_content **container, t_flags flags);
 int ft_set_file_description(const char *path, struct stat file_stat , t_content *container);
 void ft_set_str_permissions(mode_t st_mode, char *str_perm);
-int ft_print_info_file(t_content **entry, t_flags flags, int count);
+int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recursive);
 void ft_print_subdir(t_content **subdir, t_flags flags);
 int ft_open_directory(char *path, t_content *entry);
 int ft_fill_content_dir(t_content **content_dir, const char *path, t_flags flags);

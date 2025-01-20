@@ -1,0 +1,217 @@
+-rw-r--r-- 1 administrador administrador   51 Dec 13 17:53 README.md
+
+borrar/:
+total 16
+drwxr-xr-x 2 administrador administrador 4096 Jan 16 15:45 a
+-rw-r--r-- 1 administrador administrador    0 Jan 16 15:18 a.txt
+-rw-r--r-- 1 administrador administrador    0 Jan 16 15:18 b.txt
+drwxr-xr-x 2 administrador administrador 4096 Jan 15 11:56 pepa
+drwxr-xr-x 3 administrador administrador 4096 Jan 16 16:16 pepe
+-rw-r--r-- 1 administrador administrador    0 Jan 16 15:18 z.txt
+drwxr-xr-x 3 administrador administrador 4096 Jan 16 15:49 zzz
+
+borrar/a:
+total 0
+
+borrar/pepa:
+total 0
+
+borrar/pepe:
+total 4
+-rw-r--r-- 1 administrador administrador    0 Jan 16 15:19 apa.txt
+-rw-r--r-- 1 administrador administrador    0 Jan 16 15:19 hoa.txt
+drwxr-xr-x 2 administrador administrador 4096 Jan 16 18:08 nueva
+-rw-r--r-- 1 administrador administrador    0 Jan 16 15:19 ttt.txt
+
+borrar/pepe/nueva:
+total 0
+
+borrar/zzz:
+total 4
+drwxr-xr-x 2 administrador administrador 4096 Jan 16 15:49 j
+
+borrar/zzz/j:
+total 0
+-rw-r--r-- 1 administrador administrador 0 Jan 16 15:49 f.txt
+
+libs/:
+total 8
+drwxr-xr-x 4 administrador administrador 4096 Jan 19 13:17 ft_printf
+drwxr-xr-x 4 administrador administrador 4096 Jan 19 13:17 libft
+
+libs/ft_printf:
+total 108
+-rw-r--r-- 1 administrador administrador  1401 Dec 16 11:51 Makefile
+-rwxr-xr-x 1 administrador administrador  1429 Dec 13 17:55 ft_parse_flags.c
+-rwxr-xr-x 1 administrador administrador  2947 Dec 31 10:18 ft_print_char.c
+-rwxr-xr-x 1 administrador administrador  3079 Dec 13 17:55 ft_print_hex.c
+-rwxr-xr-x 1 administrador administrador  2769 Dec 13 17:55 ft_print_int.c
+-rwxr-xr-x 1 administrador administrador  2450 Dec 13 17:55 ft_print_percnt.c
+-rwxr-xr-x 1 administrador administrador  2009 Dec 13 17:55 ft_print_pointer.c
+-rwxr-xr-x 1 administrador administrador  2879 Dec 13 17:55 ft_print_str.c
+-rwxr-xr-x 1 administrador administrador  2653 Dec 13 17:55 ft_print_uint.c
+-rwxr-xr-x 1 administrador administrador  2120 Dec 13 17:55 ft_printf.c
+-rwxr-xr-x 1 administrador administrador  2871 Dec 27 14:20 ft_set_field.c
+-rwxr-xr-x 1 administrador administrador  1567 Dec 13 17:55 ft_set_value_asterisk.c
+-rwxr-xr-x 1 administrador administrador  3461 Dec 27 14:16 ft_setstr.c
+-rwxr-xr-x 1 administrador administrador  1480 Dec 13 17:55 ft_strflags.c
+drwxr-xr-x 2 administrador administrador  4096 Dec 13 17:55 includes
+-rw-r--r-- 1 administrador administrador 44970 Jan 19 13:17 libft_printf.a
+drwxr-xr-x 2 administrador administrador  4096 Jan 19 13:17 obj
+
+libs/ft_printf/includes:
+total 4
+-rwxr-xr-x 1 administrador administrador 2415 Dec 13 17:55 ft_printf.h
+
+libs/ft_printf/obj:
+total 56
+-rw-r--r-- 1 administrador administrador 1976 Jan 19 13:17 ft_parse_flags.o
+-rw-r--r-- 1 administrador administrador 4136 Jan 19 13:17 ft_print_char.o
+-rw-r--r-- 1 administrador administrador 4048 Jan 19 13:17 ft_print_hex.o
+-rw-r--r-- 1 administrador administrador 3776 Jan 19 13:17 ft_print_int.o
+-rw-r--r-- 1 administrador administrador 3392 Jan 19 13:17 ft_print_percnt.o
+-rw-r--r-- 1 administrador administrador 3080 Jan 19 13:17 ft_print_pointer.o
+-rw-r--r-- 1 administrador administrador 3712 Jan 19 13:17 ft_print_str.o
+-rw-r--r-- 1 administrador administrador 3648 Jan 19 13:17 ft_print_uint.o
+-rw-r--r-- 1 administrador administrador 3304 Jan 19 13:17 ft_printf.o
+-rw-r--r-- 1 administrador administrador 4072 Jan 19 13:17 ft_set_field.o
+-rw-r--r-- 1 administrador administrador 2544 Jan 19 13:17 ft_set_value_asterisk.o
+-rw-r--r-- 1 administrador administrador 3864 Jan 19 13:17 ft_setstr.o
+-rw-r--r-- 1 administrador administrador 1928 Jan 19 13:17 ft_strflags.o
+
+libs/libft:
+total 332
+-rwxr-xr-x 1 administrador administrador  1236 Dec 23 08:14 Makefile
+-rwxr-xr-x 1 administrador administrador  1491 Dec 13 17:55 ft_atoi.c
+-rwxr-xr-x 1 administrador administrador   995 Dec 13 17:55 ft_atos.c
+-rwxr-xr-x 1 administrador administrador   999 Dec 13 17:55 ft_bzero.c
+-rwxr-xr-x 1 administrador administrador  1110 Dec 13 17:55 ft_calloc.c
+-rw-r--r-- 1 administrador administrador   995 Dec 31 17:37 ft_free_alloc.c
+-rwxr-xr-x 1 administrador administrador  1074 Dec 13 17:55 ft_isalnum.c
+-rwxr-xr-x 1 administrador administrador  1043 Dec 13 17:55 ft_isalpha.c
+-rwxr-xr-x 1 administrador administrador   990 Dec 13 17:55 ft_isascii.c
+-rwxr-xr-x 1 administrador administrador  1013 Dec 13 17:55 ft_isdigit.c
+-rwxr-xr-x 1 administrador administrador  1012 Dec 13 17:55 ft_isprint.c
+-rwxr-xr-x 1 administrador administrador  1956 Dec 20 12:30 ft_itoa.c
+-rwxr-xr-x 1 administrador administrador  1195 Dec 13 17:55 ft_lstadd_back_bonus.c
+-rwxr-xr-x 1 administrador administrador  1057 Dec 13 17:55 ft_lstadd_front_bonus.c
+-rwxr-xr-x 1 administrador administrador  1098 Dec 13 17:55 ft_lstclear_bonus.c
+-rwxr-xr-x 1 administrador administrador  1029 Dec 13 17:55 ft_lstdelone_bonus.c
+-rwxr-xr-x 1 administrador administrador  1050 Dec 13 17:55 ft_lstiter_bonus.c
+-rwxr-xr-x 1 administrador administrador  1029 Dec 13 17:55 ft_lstlast_bonus.c
+-rwxr-xr-x 1 administrador administrador  1379 Dec 13 17:55 ft_lstmap_bonus.c
+-rwxr-xr-x 1 administrador administrador  1339 Dec 13 17:55 ft_lstnew_bonus.c
+-rwxr-xr-x 1 administrador administrador  1090 Dec 13 17:55 ft_lstsize_bonus.c
+-rwxr-xr-x 1 administrador administrador  1179 Dec 13 17:55 ft_memccpy.c
+-rwxr-xr-x 1 administrador administrador  1109 Dec 13 17:55 ft_memchr.c
+-rwxr-xr-x 1 administrador administrador  1197 Dec 13 17:55 ft_memcmp.c
+-rwxr-xr-x 1 administrador administrador  1128 Dec 13 17:55 ft_memcpy.c
+-rwxr-xr-x 1 administrador administrador  1281 Dec 13 17:55 ft_memmove.c
+-rwxr-xr-x 1 administrador administrador  1060 Dec 13 17:55 ft_memset.c
+-rwxr-xr-x 1 administrador administrador   988 Dec 13 17:55 ft_putchar.c
+-rwxr-xr-x 1 administrador administrador  1037 Dec 13 17:55 ft_putchar_fd.c
+-rwxr-xr-x 1 administrador administrador  1055 Dec 13 17:55 ft_putendl_fd.c
+-rwxr-xr-x 1 administrador administrador  1127 Dec 13 17:55 ft_putnbr.c
+-rwxr-xr-x 1 administrador administrador  1168 Dec 13 17:55 ft_putnbr_fd.c
+-rwxr-xr-x 1 administrador administrador   988 Dec 13 17:55 ft_putstr.c
+-rwxr-xr-x 1 administrador administrador  1033 Dec 13 17:55 ft_putstr_fd.c
+-rwxr-xr-x 1 administrador administrador  1189 Dec 13 17:55 ft_revstr.c
+-rw-r--r-- 1 administrador administrador  1142 Jan  8 15:32 ft_sortArray.c
+-rwxr-xr-x 1 administrador administrador  2059 Dec 13 17:55 ft_split.c
+-rwxr-xr-x 1 administrador administrador  1071 Dec 13 17:55 ft_strcat.c
+-rwxr-xr-x 1 administrador administrador  1105 Dec 13 17:55 ft_strchr.c
+-rw-r--r-- 1 administrador administrador  1045 Dec 23 07:27 ft_strcmp.c
+-rwxr-xr-x 1 administrador administrador  1079 Dec 31 12:51 ft_strcpy.c
+-rwxr-xr-x 1 administrador administrador  1354 Dec 27 14:24 ft_strdup.c
+-rwxr-xr-x 1 administrador administrador  1250 Dec 13 17:55 ft_strjoin.c
+-rwxr-xr-x 1 administrador administrador  1398 Dec 13 17:55 ft_strlcat.c
+-rwxr-xr-x 1 administrador administrador  1247 Dec 13 17:55 ft_strlcpy.c
+-rwxr-xr-x 1 administrador administrador  1002 Dec 13 17:55 ft_strlen.c
+-rwxr-xr-x 1 administrador administrador  1222 Dec 13 17:55 ft_strmapi.c
+-rwxr-xr-x 1 administrador administrador  1190 Dec 13 17:55 ft_strncat.c
+-rwxr-xr-x 1 administrador administrador  1236 Dec 13 17:55 ft_strncmp.c
+-rwxr-xr-x 1 administrador administrador  1114 Dec 13 17:55 ft_strncpy.c
+-rwxr-xr-x 1 administrador administrador  1270 Dec 13 17:55 ft_strnstr.c
+-rwxr-xr-x 1 administrador administrador  1289 Dec 13 17:55 ft_strrchr.c
+-rwxr-xr-x 1 administrador administrador  1442 Jan  1 11:20 ft_strtrim.c
+-rwxr-xr-x 1 administrador administrador  1274 Dec 13 17:55 ft_substr.c
+-rwxr-xr-x 1 administrador administrador  1016 Dec 13 17:55 ft_tolower.c
+-rwxr-xr-x 1 administrador administrador  1016 Dec 13 17:55 ft_toupper.c
+-rwxr-xr-x 1 administrador administrador  1524 Dec 13 17:55 ft_ultohex.c
+-rwxr-xr-x 1 administrador administrador  1759 Dec 13 17:55 ft_utoa.c
+drwxr-xr-x 2 administrador administrador  4096 Dec 13 17:55 includes
+-rw-r--r-- 1 administrador administrador 90456 Jan 19 13:17 libft.a
+drwxr-xr-x 2 administrador administrador  4096 Jan 19 13:17 obj
+
+libs/libft/includes:
+total 4
+-rwxr-xr-x 1 administrador administrador 3633 Jan  8 15:32 libft.h
+
+libs/libft/obj:
+total 228
+-rw-r--r-- 1 administrador administrador 1624 Jan 19 13:17 ft_atoi.o
+-rw-r--r-- 1 administrador administrador 1384 Jan 19 13:17 ft_atos.o
+-rw-r--r-- 1 administrador administrador 1280 Jan 19 13:17 ft_bzero.o
+-rw-r--r-- 1 administrador administrador 1488 Jan 19 13:17 ft_calloc.o
+-rw-r--r-- 1 administrador administrador 1400 Jan 19 13:17 ft_free_alloc.o
+-rw-r--r-- 1 administrador administrador 1288 Jan 19 13:17 ft_isalnum.o
+-rw-r--r-- 1 administrador administrador 1280 Jan 19 13:17 ft_isalpha.o
+-rw-r--r-- 1 administrador administrador 1264 Jan 19 13:17 ft_isascii.o
+-rw-r--r-- 1 administrador administrador 1264 Jan 19 13:17 ft_isdigit.o
+-rw-r--r-- 1 administrador administrador 1264 Jan 19 13:17 ft_isprint.o
+-rw-r--r-- 1 administrador administrador 2624 Jan 19 13:17 ft_itoa.o
+-rw-r--r-- 1 administrador administrador 1360 Jan 19 13:17 ft_lstadd_back_bonus.o
+-rw-r--r-- 1 administrador administrador 1312 Jan 19 13:17 ft_lstadd_front_bonus.o
+-rw-r--r-- 1 administrador administrador 1456 Jan 19 13:17 ft_lstclear_bonus.o
+-rw-r--r-- 1 administrador administrador 1408 Jan 19 13:17 ft_lstdelone_bonus.o
+-rw-r--r-- 1 administrador administrador 1296 Jan 19 13:17 ft_lstiter_bonus.o
+-rw-r--r-- 1 administrador administrador 1280 Jan 19 13:17 ft_lstlast_bonus.o
+-rw-r--r-- 1 administrador administrador 1776 Jan 19 13:17 ft_lstmap_bonus.o
+-rw-r--r-- 1 administrador administrador 1720 Jan 19 13:17 ft_lstnew_bonus.o
+-rw-r--r-- 1 administrador administrador 1304 Jan 19 13:17 ft_lstsize_bonus.o
+-rw-r--r-- 1 administrador administrador 1352 Jan 19 13:17 ft_memccpy.o
+-rw-r--r-- 1 administrador administrador 1296 Jan 19 13:17 ft_memchr.o
+-rw-r--r-- 1 administrador administrador 1328 Jan 19 13:17 ft_memcmp.o
+-rw-r--r-- 1 administrador administrador 1328 Jan 19 13:17 ft_memcpy.o
+-rw-r--r-- 1 administrador administrador 1432 Jan 19 13:17 ft_memmove.o
+-rw-r--r-- 1 administrador administrador 1280 Jan 19 13:17 ft_memset.o
+-rw-r--r-- 1 administrador administrador 1392 Jan 19 13:17 ft_putchar.o
+-rw-r--r-- 1 administrador administrador 1512 Jan 19 13:17 ft_putchar_fd.o
+-rw-r--r-- 1 administrador administrador 1656 Jan 19 13:17 ft_putendl_fd.o
+-rw-r--r-- 1 administrador administrador 1712 Jan 19 13:17 ft_putnbr.o
+-rw-r--r-- 1 administrador administrador 1600 Jan 19 13:17 ft_putnbr_fd.o
+-rw-r--r-- 1 administrador administrador 1408 Jan 19 13:17 ft_putstr.o
+-rw-r--r-- 1 administrador administrador 1480 Jan 19 13:17 ft_putstr_fd.o
+-rw-r--r-- 1 administrador administrador 1648 Jan 19 13:17 ft_revstr.o
+-rw-r--r-- 1 administrador administrador 1592 Jan 19 13:17 ft_sortArray.o
+-rw-r--r-- 1 administrador administrador 2600 Jan 19 13:17 ft_split.o
+-rw-r--r-- 1 administrador administrador 1336 Jan 19 13:17 ft_strcat.o
+-rw-r--r-- 1 administrador administrador 1448 Jan 19 13:17 ft_strchr.o
+-rw-r--r-- 1 administrador administrador 1296 Jan 19 13:17 ft_strcmp.o
+-rw-r--r-- 1 administrador administrador 1320 Jan 19 13:17 ft_strcpy.o
+-rw-r--r-- 1 administrador administrador 1552 Jan 19 13:17 ft_strdup.o
+-rw-r--r-- 1 administrador administrador 1664 Jan 19 13:17 ft_strjoin.o
+-rw-r--r-- 1 administrador administrador 1696 Jan 19 13:17 ft_strlcat.o
+-rw-r--r-- 1 administrador administrador 1392 Jan 19 13:17 ft_strlcpy.o
+-rw-r--r-- 1 administrador administrador 1264 Jan 19 13:17 ft_strlen.o
+-rw-r--r-- 1 administrador administrador 1600 Jan 19 13:17 ft_strmapi.o
+-rw-r--r-- 1 administrador administrador 1352 Jan 19 13:17 ft_strncat.o
+-rw-r--r-- 1 administrador administrador 1440 Jan 19 13:17 ft_strncmp.o
+-rw-r--r-- 1 administrador administrador 1352 Jan 19 13:17 ft_strncpy.o
+-rw-r--r-- 1 administrador administrador 1416 Jan 19 13:17 ft_strnstr.o
+-rw-r--r-- 1 administrador administrador 1640 Jan 19 13:17 ft_strrchr.o
+-rw-r--r-- 1 administrador administrador 1856 Jan 19 13:17 ft_strtrim.o
+-rw-r--r-- 1 administrador administrador 1600 Jan 19 13:17 ft_substr.o
+-rw-r--r-- 1 administrador administrador 1264 Jan 19 13:17 ft_tolower.o
+-rw-r--r-- 1 administrador administrador 1264 Jan 19 13:17 ft_toupper.o
+-rw-r--r-- 1 administrador administrador 2032 Jan 19 13:17 ft_ultohex.o
+-rw-r--r-- 1 administrador administrador 2392 Jan 19 13:17 ft_utoa.o
+
+srcs/:
+total 48
+-rw-r--r-- 1 administrador administrador 10693 Jan 20 10:01 ft_get_file.c
+-rw-r--r-- 1 administrador administrador  7116 Jan 19 11:40 ft_manage_content.c
+-rw-r--r-- 1 administrador administrador  2686 Jan  8 15:08 ft_parse_ft_ls_argv.c
+-rw-r--r-- 1 administrador administrador  9023 Jan 20 10:54 ft_print_info_file.c
+-rw-r--r-- 1 administrador administrador  6529 Jan 20 10:49 ft_recursive_ls.c
+-rw-r--r-- 1 administrador administrador  2291 Jan 20 10:39 main.c

@@ -44,7 +44,7 @@ int main(int args, char *argv[])
 				current = current->next;
 			}
 		}
-		if ((ft_print_info_file(&container, flags, file_count)) == EXIT_FAILURE)
+		if ((ft_print_info_file(&container, flags, file_count, 0)) == EXIT_FAILURE)
 		{
 			ft_printf("Failed to print info file\n");
 			return (EXIT_FAILURE);

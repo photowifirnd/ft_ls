@@ -148,6 +148,10 @@ int ft_recursive(t_content *dir, t_flags flags)
     
 	while (current != NULL)
 	{
+        if (current->file_description->type == 'd' && ft_strcmp(current->name, ".") != 0 && ft_strcmp(current->name, "..") != 0)
+        {
+            ft_printf("\n");
+        }
 		if (current->file_description->type == 'd' && ft_strcmp(current->name, ".") != 0 && ft_strcmp(current->name, "..") != 0)
 		{
             t_content *newNode = new_container(current->file_description->path);
@@ -165,7 +169,7 @@ int ft_recursive(t_content *dir, t_flags flags)
                     continue;
 					//return (EXIT_FAILURE); // Or should continue?
 				}
-            ft_print_info_file(&newNode, flags, 1); // if EXIT_FAILURE, should we continue?
+            ft_print_info_file(&newNode, flags, 1, 1); // if EXIT_FAILURE, should we continue?
             ft_free_recursive(&newNode);
 		}
 		current = (flags.r) ? current->prev : current->next;
