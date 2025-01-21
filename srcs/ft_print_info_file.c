@@ -51,7 +51,7 @@ void ft_print_description(t_file *file_description, t_columns columns)
     char *date;
     date = ft_strtrim(file_description->date, "\n");
     ft_printf("%s ", file_description->str_perm);
-    ft_printf("%-*d ", columns.nlink, file_description->nlink);
+    ft_printf("%*d ", columns.nlink, file_description->nlink);
     ft_printf("%-*s ", columns.owner, file_description->str_owner);
     ft_printf("%-*s ", columns.group, file_description->str_group);
     ft_printf("%*d ", columns.size, file_description->size);

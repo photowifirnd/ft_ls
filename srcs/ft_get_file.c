@@ -22,7 +22,7 @@ char *ft_set_date(time_t timestamp)
     time_t diff_time;
     time_t six_months = 15778463; // Approximately six months in seconds
     char date[20]; // Buffer to hold the formatted date
-
+    
     ft_bzero(date, 20);
     current_time = time(NULL);
     file_time = timestamp;
@@ -102,7 +102,7 @@ void ft_set_type(struct stat file_stat, t_content *entry) {
 void ft_set_ids(struct stat file_stat, t_content *entry) {
     char *owner = NULL;
     char *group = NULL;
-    struct passwd *pwd = getpwuid(file_stat.st_gid);
+    struct passwd *pwd = getpwuid(file_stat.st_uid);
     struct group *grp = getgrgid(file_stat.st_gid);
 
     if (pwd == NULL)

@@ -31,7 +31,7 @@ int main(int args, char *argv[])
 	{
 		t_content *current = ft_get_container_head(container);
 		
-		if (current != NULL && current->name != NULL){
+		if (current != NULL && ft_strlen(current->name)/* current->name != NULL */){
 			
 			while (current != NULL)
 			{
