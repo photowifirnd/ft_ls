@@ -130,6 +130,8 @@ void ft_print_subdir(t_content **subdir, t_flags flags)
 }
 int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recursive)
 {
+    (void)is_recursive;
+    (void)count;
     t_content *current;
     t_columns columns;
     int is_new_line = 0;
@@ -146,6 +148,137 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
      * 0: no regular files where found in arguments
      * 1: regular files where found in arguments
      */
+    while (current != NULL)
+    {
+        if (is_new_line == 1 && current->file_description->type == 'd')
+        {
+            ft_printf("\n");
+            no_directory = 1;
+        }
+        // Handle the -l flag: Print detailed information
+        if (flags.l || (flags.R && flags.l))
+        {
+            if (current->file_description->type == 'd')
+            {
+                if (count > 1 || flags.R){
+                    ft_printf("%s:\n", current->file_description->fname);
+                }
+                ft_printf("total %d\n", current->blk_total);
+                if (!current->blk_total && ((!flags.r && current->next != NULL && current->next->file_description->type == 'd') || (flags.r && current->prev != NULL && current->prev->file_description->type == 'd')))
+                {
+                    ft_printf("\n", current->next->name);
+                    is_new_line = 0;
+                }
+                else if (!current->blk_total && ((!flags.r && current->next != NULL && no_directory)))
+                {
+                    ft_printf("\n");
+                    is_new_line = 0;
+                }
+            }
+            if (current->subdir != NULL)
+            {
+                ft_print_subdir(&current->subdir, flags);
+                
+                //should print new line if there are more directories to print but only if is_new_line is false
+                if (!is_recursive && !flags.R && ((!flags.r && current->next != NULL && current->next->file_description->type == 'd' && !is_new_line) ||
+                    (flags.r && current->prev != NULL && current->prev->file_description->type == 'd' && !is_new_line)))
+                {
+                    ft_printf("\n");
+                }
+            }
+            if (flags.R && current->subdir != NULL)
+            {
+                ft_recursive(current, flags);
+                
+                if (!is_recursive && !flags.a && !flags.r &&current->next != NULL){
+                    printf("%d\n", is_recursive);
+                    is_new_line = 0;
+                }
+                else if (!is_recursive && ((!flags.r && current->next != NULL && !no_directory) ||
+                (flags.r && current->prev != NULL && !no_directory)))
+                {
+                    ft_printf("\n");
+                }
+                else if (!is_recursive && flags.r && !flags.a && current->prev != NULL && no_directory && current->prev->file_description->type == 'd') {
+                    ft_printf("\n");
+                }
+                //ft_printf("Remember to check ret and this is the last thing you modified\n");
+            }
+        }
+        /* else
+        {
+            if (current->file_description->type == 'd' && count > 1)
+            {
+                if (is_new_line == 1)
+                {
+                    ft_printf("\n");
+                    is_new_line = 0;
+                }
+                ft_printf("%s:\n", current->file_description->fname);
+            }
+            else if (current->file_description->type == 'd'&& flags.R)
+            {
+                if (is_new_line == 1)
+                {
+                    ft_printf("\n");
+                    is_new_line = 0;
+                }
+                ft_printf("%s:\n", current->file_description->fname);
+                if (current->subdir == NULL)
+                {
+                    ft_printf("\n");
+                }
+            }
+            if (current->subdir != NULL)
+            {
+                t_content *subdir;
+
+                subdir = (flags.r) ? current->subdir->end : current->subdir->begin;
+                while (subdir != NULL){
+                    if (subdir->name[0] == '.' && !flags.a)
+                    {
+                        subdir = (flags.r) ? subdir->prev : subdir->next;
+                        continue;
+                    }
+                    ft_printf("%s", subdir->file_description->fname);
+                    if ((subdir->next != NULL && !flags.r) || (subdir->prev != NULL && flags.r))
+                    {
+                        ft_printf("  ");
+                    }
+                    subdir = (flags.r) ? subdir->prev : subdir->next;
+                   
+                }
+                ft_printf("\n");
+                if ((!flags.r && current->next != NULL) || (flags.r && current->prev != NULL && current->prev->file_description->type == 'd'))
+                {
+                    ft_printf("-\n");// You are here with -R flag prints more than one line
+                }
+            }
+            if (flags.R && current->subdir != NULL)
+            {
+                
+                if ((ft_recursive(current, flags)) == EXIT_FAILURE)
+                {
+                    ft_printf("Failed to query directory %s\n", current->name);
+                    return (EXIT_FAILURE);
+                }
+                if ((!flags.r && is_recursive == 0 && current->next != NULL && !no_directory) ||
+                (flags.r && is_recursive == 0 && current->prev != NULL && !no_directory))
+                {
+                    ft_printf("--\n");
+                }
+            }
+        } */
+        current = (flags.r) ? current->prev : current->next;
+    }
+    if (!no_directory && is_new_line && !flags.l)
+    {
+        ft_printf("zzz\n");
+    }
+    return (SUCCESS);
+}
+
+/**
     while (current != NULL)
     {
         if (is_new_line == 1 && current->file_description->type == 'd')
@@ -226,6 +359,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                         ft_printf("  ");
                     }
                     subdir = (flags.r) ? subdir->prev : subdir->next;
+                   
                 }
                 ft_printf("\n");
                 if ((!flags.r && current->next != NULL) || (flags.r && current->prev != NULL && current->prev->file_description->type == 'd'))
@@ -250,9 +384,5 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
         }
         current = (flags.r) ? current->prev : current->next;
     }
-    if (!no_directory && is_new_line && !flags.l)
-    {
-        ft_printf("\n");
-    }
-    return (SUCCESS);
-}
+ 
+ */
