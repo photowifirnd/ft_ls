@@ -156,7 +156,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
             no_directory = 1;
         }
         // Handle the -l flag: Print detailed information
-        if (flags.l || (flags.R && flags.l))
+        if (flags.l || (flags.R && flags.l)) //This if is with -l flag
         {
             if (current->file_description->type == 'd')
             {
@@ -191,7 +191,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                 ft_recursive(current, flags);
                 
                 if (!is_recursive && !flags.a && !flags.r &&current->next != NULL){
-                    printf("%d\n", is_recursive);
+                    printf("\n");
                     is_new_line = 0;
                 }
                 else if (!is_recursive && ((!flags.r && current->next != NULL && !no_directory) ||
@@ -205,13 +205,13 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                 //ft_printf("Remember to check ret and this is the last thing you modified\n");
             }
         }
-        /* else
+        else //From Here is without -l flag
         {
             if (current->file_description->type == 'd' && count > 1)
             {
                 if (is_new_line == 1)
                 {
-                    ft_printf("\n");
+                    ft_printf("11\n");
                     is_new_line = 0;
                 }
                 ft_printf("%s:\n", current->file_description->fname);
@@ -220,14 +220,20 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
             {
                 if (is_new_line == 1)
                 {
-                    ft_printf("\n");
+                    ft_printf("22\n");
                     is_new_line = 0;
                 }
                 ft_printf("%s:\n", current->file_description->fname);
-                if (current->subdir == NULL)
+                if (current->subdir == NULL && !is_recursive && ((!flags.r && current->next && current->prev->file_description->type == 'd') || (flags.r && current->prev && current->prev->file_description->type == 'd')))
                 {
-                    ft_printf("\n");
+                    ft_printf("33->%d\n", is_recursive);
                 }
+            }
+            if (current->subdir == NULL && !is_recursive  && !is_new_line &&
+               ((!flags.r &&current->next != NULL && current->next->file_description->type == 'd') ||
+               (flags.r && current->prev != NULL && current->prev->file_description->type == 'd')))
+            {
+                ft_printf("44\n");
             }
             if (current->subdir != NULL)
             {
@@ -249,9 +255,10 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                    
                 }
                 ft_printf("\n");
-                if ((!flags.r && current->next != NULL) || (flags.r && current->prev != NULL && current->prev->file_description->type == 'd'))
+                //here we have to control if we get here with -R flag and there are other directories to print test: ./ft_ls -R vacia/ vacia/ srcs/ ; ./ft_ls -R vacia/ vacia/ srcs/ borrar
+                if (!flags.R && !is_recursive &&((!flags.r && current->next != NULL) || (flags.r && current->prev != NULL && current->prev->file_description->type == 'd')))
                 {
-                    ft_printf("-\n");// You are here with -R flag prints more than one line
+                    ft_printf("55->%d\n", is_recursive);// You are here with -R flag prints more than one line
                 }
             }
             if (flags.R && current->subdir != NULL)
@@ -262,13 +269,25 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                     ft_printf("Failed to query directory %s\n", current->name);
                     return (EXIT_FAILURE);
                 }
-                if ((!flags.r && is_recursive == 0 && current->next != NULL && !no_directory) ||
+                 if (!is_recursive && !flags.a && !flags.r &&current->next != NULL){
+                    printf("%d\n", is_recursive);
+                    is_new_line = 0;
+                }
+                else if (!is_recursive && ((!flags.r && current->next != NULL && !no_directory) ||
+                (flags.r && current->prev != NULL && !no_directory)))
+                {
+                    ft_printf("\n");
+                }
+                else if (!is_recursive && flags.r && !flags.a && current->prev != NULL && no_directory && current->prev->file_description->type == 'd') {
+                    ft_printf("\n");
+                }
+                /* if ((!flags.r && is_recursive == 0 && current->next != NULL && !no_directory) ||
                 (flags.r && is_recursive == 0 && current->prev != NULL && !no_directory))
                 {
                     ft_printf("--\n");
-                }
+                } */
             }
-        } */
+        }
         current = (flags.r) ? current->prev : current->next;
     }
     if (!no_directory && is_new_line && !flags.l)
