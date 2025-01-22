@@ -15,6 +15,7 @@ t_content *new_container(const char *name)
 	}
     ft_bzero(new_node->name, MAX_NAME);
 	ft_strcpy(new_node->name, name);
+	new_node->error = 0;
 	new_node->blk_total = 0;
     new_node->begin = new_node;
     new_node->end = new_node;

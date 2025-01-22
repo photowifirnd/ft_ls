@@ -65,6 +65,7 @@ typedef struct 	s_file
 typedef struct	s_content
 {
 	char					name[MAX_PATH];
+	int						error;
 	int 					blk_total;
 	struct s_file			*file_description;
 	struct s_content		*subdir;
@@ -88,6 +89,7 @@ void ft_print_subdir(t_content **subdir, t_flags flags);
 int ft_open_directory(char *path, t_content *entry);
 int ft_fill_content_dir(t_content **content_dir, const char *path, t_flags flags);
 int ft_deny_access(const char *path);
+int ft_error_open_dir(const char *path, int is_new_line);
 void ft_get_full_path(char *full_path, const char *path, const char *name);
 int ft_fill_description(char *path, t_content **container);
 void ft_calculate_widths(t_columns *columns, t_content **subdir);

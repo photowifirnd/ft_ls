@@ -68,9 +68,25 @@ void ft_set_str_permissions(mode_t st_mode, char *str_perm) {
  */
 int ft_deny_access(const char *path) {
     
-    write(2, "ft_ls: cannot open directory ", 29);
+    write(2, "ft_ls: cannot access '", 22);
     write(2, path, ft_strlen(path));
-    write(2, ": Permission denied\n", 21);
+    write(2, "': No such file or directory\n", 29);
+    var_error = 2; //Substitute this for a global variable Constant lile ACCESS_DENIED
+    return var_error;
+}
+int ft_error_open_dir(const char *path, int is_new_line)
+{
+    if (is_new_line)
+    {
+        write(2, "\n", 1);
+    }
+    write(2, "ft_ls: cannot open directory '", 30);
+    write(2, path, ft_strlen(path));
+    write(2, "': Permission denied", 20);
+    if (!is_new_line)
+    {
+        write(2, "\n", 1);
+    }
     var_error = 2; //Substitute this for a global variable Constant lile ACCESS_DENIED
     return var_error;
 }
@@ -212,7 +228,10 @@ int ft_fill_content_dir(t_content **content_dir, const char *path, t_flags flags
     t_content *new_node;
     
     if (!(dir = opendir(path))) {
-        return ft_deny_access(path);
+        new_node = new_container(path);
+        new_node->error = -1;
+        ft_add_new_node(&current->subdir, new_node);
+        return 2;
     }
     while ((sdir = readdir(dir)) != NULL)
     {
