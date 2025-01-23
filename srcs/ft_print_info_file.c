@@ -70,13 +70,18 @@ void ft_print_description(t_file *file_description, t_columns columns)
 //print files in the container, not directories: intended for files passed as arguments
 int ft_print_files_in_args(t_content **container, t_flags flags, t_columns columns)
 {
-    t_content *current = *container;
+    t_content *current;
     t_content *tmp = NULL;
     t_content *new_node;
 
     int ret = 0;
-    
-    current = (flags.r) ? current->end : current->begin;
+    /* current = (*container)->begin;
+    while (current != NULL){
+            ft_printf("BeforeL: %s, begin: %s, end: %s, next: %s, prev: %s\n", current->name, current->begin->name, current->end->name, current->next->name, current->prev->name);
+            current =  current->next;
+    } */
+       
+    current = (flags.r) ? (*container)->end : (*container)->begin;
     while ( current != NULL)
     {
         if (current->file_description->type != 'd')
@@ -91,22 +96,51 @@ int ft_print_files_in_args(t_content **container, t_flags flags, t_columns colum
                 ft_add_new_node(&tmp, new_node); 
             }
             ret = 1;
+            
+            //ft_printf("Currnent after remove current: %s, prev: %s, next: %s\n", current->name);
         }
         current = (flags.r) ? current->prev : current->next;
     }
-    if (tmp == NULL)
-        return ret;
-    current = tmp->begin;
-    while (current != NULL)
-    {
-        ft_printf("%s", current->name);
-        if (current->next != NULL)
+   
+    
+    if (tmp != NULL){
+        current = tmp->begin;
+        while (current != NULL)
         {
-            ft_printf("  ");
+            ft_printf("%s", current->name);
+            if (current->next != NULL)
+            {
+                ft_printf("  ");
+            }
+            current = current->next;
         }
+        free_content_dir(&tmp);
+    }
+         current = (*container)->begin;
+    
+    while ( flags.l && current != NULL)
+    {
+        if (current->file_description->type != 'd')
+        {
+            //ft_printf("Current to remove: %s\n", current->name);
+            current = ft_remove_node(current);
+            if (current == NULL){
+                ret = -1;
+                break;
+            }
+        }
+        if (current->next == NULL){
+            //ft_printf("Previous to NULL: %s, begin: %s, end: %s, next: %s, prev: %s\n", current->name, current->begin->name, current->end->name, current->next->name, current->prev->name);
+            (*container) = current->begin;
+        }
+            
         current = current->next;
     }
-    free_content_dir(&tmp);
+   /*  current = (*container)->begin;
+    while (current != NULL){
+            ft_printf("\nAfter: Checking content: %s\n", current->name);
+            current =  current->next;
+    } */
     return ret;
 }
 //print files and directories in the given container: Intended for listing subdir content
@@ -142,19 +176,31 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
 	}
     current = (*entry)->begin;
     is_new_line = ft_print_files_in_args(entry, flags, columns);
-    current = (*entry)->begin;
-    current = (flags.r) ? (*entry)->end : (*entry)->begin;
+    if (is_new_line == -1){
+        (*entry) = NULL;
+        current = NULL;
+    } else {
+        //current = (*entry)->begin;
+        current = (flags.r) ? (*entry)->end : (*entry)->begin;
+        /* while (current != NULL){
+            ft_printf("\nChecking content: %s\n", current->name);
+            current = (flags.r) ? current->prev : current->next;
+        }
+        current = (flags.r) ? (*entry)->end : (*entry)->begin; */
+    }
     /**
+     * -1: entry became NULL
      * 0: no regular files where found in arguments
      * 1: regular files where found in arguments
      */
+    
     while (current != NULL)
     {
         if (current->error == -1 || (current->subdir != NULL && current->subdir->error == -1))
             {
                 //ft_printf("ft_ls: '%s': No such file or directory\n", current->name);
                 if (is_new_line == 1){
-                ft_error_open_dir(current->name, 1);
+                    ft_error_open_dir(current->name, 1);
                 }
                 else
                 {
@@ -172,20 +218,23 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
         // Handle the -l flag: Print detailed information
         if (flags.l || (flags.R && flags.l)) //This if is with -l flag
         {
+            
             if (current->file_description->type == 'd')
             {
                 if (count > 1 || flags.R){
                     ft_printf("%s:\n", current->file_description->fname);
                 }
                 ft_printf("total %d\n", current->blk_total);
-                if (!current->blk_total && ((!flags.r && current->next != NULL && current->next->file_description->type == 'd') || (flags.r && current->prev != NULL && current->prev->file_description->type == 'd')))
+                if (!current->blk_total && 
+                   ((!flags.r && current->next != NULL && current->next->file_description->type == 'd') || (flags.r && current->prev != NULL && current->prev->file_description->type == 'd')))
                 {
-                    ft_printf("\n", current->next->name);
+                    //ft_printf("44 > TYPE: %c, %s: Conditions: flags.l=%d, flags.a=%d, flags.r=%d, flags.t=%d, flags.R=%d; is_new_line=%d, no_directory=%d\n", current->next->file_description->type ,current->next->name, flags.l, flags.a, flags.r, flags.t, flags.R, is_new_line, no_directory);
+                    ft_printf("\n");
                     is_new_line = 0;
                 }
                 else if (!current->blk_total && ((!flags.r && current->next != NULL && no_directory)))
                 {
-                    ft_printf("\n");
+                    ft_printf("55 > TYPE: %c, %s: Conditions: flags.l=%d, flags.a=%d, flags.r=%d, flags.t=%d, flags.R=%d; is_new_line=%d, no_directory=%d\n", current->next->file_description->type ,current->next->name, flags.l, flags.a, flags.r, flags.t, flags.R, is_new_line, no_directory);
                     is_new_line = 0;
                 }
             }
@@ -304,9 +353,11 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
         }
         current = (flags.r) ? current->prev : current->next;
     }
-    if (!no_directory && is_new_line && !flags.l)
+    if (!no_directory && is_new_line == 1 && !flags.l)
     {
         ft_printf("\n");
+    }else if(count == 1 && is_new_line == -1 && !flags.l){
+        ft_printf("--\n");
     }
     return (SUCCESS);
 }

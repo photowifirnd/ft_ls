@@ -292,7 +292,7 @@ int ft_query_file(char **search, int search_count, t_content **container, t_flag
             }
             if (flags.t == 0)
             {
-                if (ft_add_new_node(container, new_node) == EXIT_FAILURE) {//maybe withou the & symbol
+                if (ft_add_new_node_alphanumeric(container, new_node) == EXIT_FAILURE) {//WTF: Add__new_node isn't working properly??
                     ft_printf("Failed to add new node for %s\n", search[i]);
                     return EXIT_FAILURE;
                 }

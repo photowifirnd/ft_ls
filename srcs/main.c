@@ -50,14 +50,18 @@ int main(int args, char *argv[])
 			return (EXIT_FAILURE);
 		}
 		//ft_recursive(&(*container), flags);
-		current = ft_get_container_head(container);
-		while (current != NULL)
-		{
-			free_content_dir(&current->subdir);
-			current = current->next;
-		}
 		
-		free_content_dir(&container);
+		if ((container != NULL)){
+			current = ft_get_container_head(container);
+			
+			while (current != NULL)
+			{
+				free_content_dir(&current->subdir);
+				current = current->next;
+			}
+			
+			free_content_dir(&container);
+		}
 	}
 	for (int i = 0; i < file_count; i++)
 		ft_free_alloc(files_to_search[i]);

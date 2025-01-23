@@ -95,6 +95,7 @@ int ft_fill_description(char *path, t_content **container);
 void ft_calculate_widths(t_columns *columns, t_content **subdir);
 
 t_content *new_container(const char *name);
+t_content *ft_remove_node(t_content *node);
 int ft_add_new_node(t_content **head, t_content *new_node);
 int ft_add_new_node_alphanumeric(t_content **container, t_content *new_node);
 int ft_add_new_node_by_time(t_content **container, t_content *node);

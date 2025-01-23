@@ -25,6 +25,75 @@ t_content *new_container(const char *name)
     new_node->file_description = NULL;
     return new_node;
 }
+int ft_delete_node(t_content *node_to_delete){
+	node_to_delete->next = NULL;
+	node_to_delete->prev = NULL;
+	node_to_delete->begin = node_to_delete;
+	node_to_delete->end = node_to_delete;
+	if (node_to_delete->subdir != NULL){
+		ft_printf("Removing subdir: %s\n", node_to_delete->name);
+		free_content_dir(&node_to_delete->subdir);
+	}
+	free_content_dir(&node_to_delete);
+	return EXIT_SUCCESS;
+}
+t_content *ft_remove_node(t_content *node)
+{
+	t_content *current;
+	t_content *tmp;
+
+	if (node == NULL)
+		return NULL;
+	current = node->begin;
+	if (node->begin == node){
+		//ft_printf("Removing from head: node_to_delete is the begining: %s\n", node->name);
+		if (current->next == NULL){
+			ft_delete_node(node);
+			return NULL;
+		}
+		tmp = node->next;
+		tmp->prev = NULL;
+		tmp->begin = tmp;
+		t_content *aux = tmp->begin;
+		while (aux != NULL){
+			aux->begin = tmp;
+			aux = aux->next;
+		}
+		ft_delete_node(node);
+		return tmp;
+	} else if (node->end == node){
+		//ft_printf("Removing from tail: node_to_delete is the end: %s\n", node->name);
+		if (node->prev == NULL){
+			ft_delete_node(node);
+			return NULL;
+		}
+		tmp = node->prev;
+		tmp->next = NULL;
+		tmp->end = tmp;
+		t_content *aux = tmp->begin;
+		while (aux != NULL){
+			aux->end = tmp;
+			aux = aux->next;
+		}
+		ft_delete_node(node);
+		return tmp;
+	} else {
+		
+		while (current != NULL){
+			if (current == node){
+				//ft_printf("Removing from middle: node_to_delete is in the middle: %s\n", node->name);
+				tmp = node->prev;
+				tmp->next = node->next;
+				node->next->prev = tmp;
+				ft_delete_node(node);
+				node = tmp;
+				return node;
+			}
+			current = current->next;
+		}
+	}
+	return EXIT_SUCCESS;
+}
 //function to insert at the begining of a container
 int ft_insert_at_begining(t_content **container, t_content *new_node)
 {
@@ -232,10 +301,10 @@ void free_content_dir(t_content **container)
     {
         if (current->file_description != NULL) {
 			ft_free_alloc(current->file_description->date);
-            free(current->file_description);
+            ft_free_alloc(current->file_description);
         }
         next = current->next;
-        free(current);
+        ft_free_alloc(current);
         current = next;
     }
 }
