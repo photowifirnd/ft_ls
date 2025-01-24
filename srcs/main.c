@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_ls.h"
-int var_error = 0;
+int var_error = SUCCESS;
 
 int main(int args, char *argv[])
 {

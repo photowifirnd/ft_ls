@@ -88,8 +88,6 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
 void ft_print_subdir(t_content **subdir, t_flags flags);
 int ft_open_directory(char *path, t_content *entry);
 int ft_fill_content_dir(t_content **content_dir, const char *path, t_flags flags);
-int ft_deny_access(const char *path);
-int ft_error_open_dir(const char *path, int is_new_line);
 void ft_get_full_path(char *full_path, const char *path, const char *name);
 int ft_fill_description(char *path, t_content **container);
 void ft_calculate_widths(t_columns *columns, t_content **subdir);
@@ -105,5 +103,11 @@ void free_content_dir(t_content **container);
 
 void ft_get_recursive_dir_content(t_content **container, const char *path, t_flags flags);
 int ft_recursive(t_content *dir, t_flags flags);
+
+//Print errors
+void ft_invalid_option(char *str);
+void ft_unrecognized_option(char *str);
+int ft_deny_access(const char *path);
+int ft_error_open_dir(const char *path, int is_new_line);
 
 #endif

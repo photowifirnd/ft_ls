@@ -34,21 +34,24 @@ void ft_parse_ft_ls_argv(int argc, char *argv[], t_flags *flags, char ***files, 
 	*files = malloc(argc * sizeof(char *));//here is a malloc which must be freed
 	*file_count = 0;
 	init_flags(flags);
+	int is_file = 0;
 
 	for (int i = 1; i < argc; i++)
 	{
-		if (argv[i][0] == '-')
+		if (argv[i][0] == '-' && !is_file)
 		{
-			if (ft_strcmp(argv[i], "--all") == 0)
-				flags->a = 1;
-			else if (ft_strcmp(argv[i], "--reverse") == 0)
-				flags->r = 1;
-			else if (ft_strcmp(argv[i], "--recursive") == 0)
-				flags->R = 1;
+			if (ft_strcmp(argv[i], "-") == 0){
+				ft_set_file("-", file_count, files);
+				is_file = 1;
+			}
+			else if (ft_strcmp(argv[i], "--") == 0)
+				is_file = 1; 
 			else if (argv[i][1] == '-')
 			{
-				ft_printf("Error: Invalid option -- %s\n", argv[i]);
-				exit(EXIT_FAILURE); //with ft_ls -- -la /path_to_something it will print error but it will not exit. It treats '-la' as a file
+				/* ft_printf("Error: Unrecognized option -- %s\n", argv[i]);
+				var_error = ERROR; */
+				ft_unrecognized_option(&argv[i][2]);
+				return; ; //with ft_ls -- -la /path_to_something it will print error but it will not exit. It treats '-la' as a file
 			}
 			else
 			{
@@ -61,8 +64,10 @@ void ft_parse_ft_ls_argv(int argc, char *argv[], t_flags *flags, char ***files, 
 						case 'r': flags->r = 1; break;
 						case 'R': flags->R = 1; break;
 						case 't': flags->t = 1; break;
-						default: fprintf(stderr, "Error: Invalid option -%c\n", argv[i][j]);
-						exit(EXIT_FAILURE);
+						default: ft_invalid_option(&argv[i][j]);
+						//default: ft_printf("Error: Invalid option -%c\n", argv[i][j]);
+						//var_error = ERROR;
+						return ;
 					}
 				}
 			}
@@ -70,6 +75,7 @@ void ft_parse_ft_ls_argv(int argc, char *argv[], t_flags *flags, char ***files, 
 		else
 		{
 			ft_set_file(argv[i], file_count, files);
+			is_file = 1;
 		}
 	}
 	if (*file_count == 0)
