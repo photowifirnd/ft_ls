@@ -61,9 +61,7 @@ void ft_set_str_permissions(mode_t st_mode, char *str_perm) {
     str_perm[7] = (st_mode & S_IROTH) ? 'r' : '-';
     str_perm[8] = (st_mode & S_IWOTH) ? 'w' : '-';
     str_perm[9] = (st_mode & S_IXOTH) ? 'x' : '-';
-    
 }
-
 /**
  * @brief Function to set the type of a file
  */
@@ -140,7 +138,7 @@ int ft_set_file_description(const char *path, struct stat file_stat, t_content *
     current_node->file_description->owner = file_stat.st_uid;
     current_node->file_description->group = file_stat.st_gid;
     current_node->file_description->timestamp = file_stat.st_mtime;
-    current_node->file_description->date = ft_set_date(current_node->file_description->timestamp);//ft_strdup(ctime(&file_stat.st_mtime));
+    current_node->file_description->date = ft_set_date(current_node->file_description->timestamp);
     current_node->file_description->blocks = file_stat.st_blocks;
     current_node->file_description->block_size = file_stat.st_blksize;
     ft_set_ids(file_stat, current_node);
@@ -184,7 +182,7 @@ int ft_fill_description(char *path, t_content **container)
 {
     struct stat file_stat = ft_get_file_stat(path);
     
-    if (file_stat.st_mode == 0 || ft_set_file_description(path, file_stat, (*container)) != 0) {//take care of this, it was calling to sub_file_description
+    if (file_stat.st_mode == 0 || ft_set_file_description(path, file_stat, (*container)) != 0) {
         ft_printf("Failed to set file description for %s\n", path);
         return EXIT_FAILURE;
     }
@@ -257,7 +255,7 @@ int ft_query_file(char **search, int search_count, t_content **container, t_flag
     {
         struct stat file_stat;
         if (lstat(search[i], &file_stat) == -1) {
-            var_error = ft_deny_access(search[i]); //catch error to global var and return it at the exit program
+            var_error = ft_deny_access(search[i]);
         } else {
             new_node = new_container(search[i]);
             if (ft_set_file_description(search[i], file_stat,  new_node) != 0) {
@@ -266,7 +264,7 @@ int ft_query_file(char **search, int search_count, t_content **container, t_flag
             }
             if (flags.t == 0)
             {
-                if (ft_add_new_node_alphanumeric(container, new_node) == EXIT_FAILURE) {//WTF: Add__new_node isn't working properly??
+                if (ft_add_new_node_alphanumeric(container, new_node) == EXIT_FAILURE) {
                     ft_printf("Failed to add new node for %s\n", search[i]);
                     return EXIT_FAILURE;
                 }

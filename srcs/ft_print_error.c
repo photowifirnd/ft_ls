@@ -54,3 +54,9 @@ void ft_unrecognized_option(char *str)
 	var_error = ERROR;
 	return;
 }
+void ft_print_error(const char *err)
+{
+	ft_putstr_fd(err, 2);
+	var_error = ERROR; //Substitute this for a global variable Constant lile ACCESS_DENIED
+	return;
+}

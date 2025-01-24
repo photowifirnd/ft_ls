@@ -30,11 +30,10 @@ void init_flags(t_flags *flags)
 
 void ft_parse_ft_ls_argv(int argc, char *argv[], t_flags *flags, char ***files, int *file_count)
 {
-	// Array para guardar archivos/directorios
-	*files = malloc(argc * sizeof(char *));//here is a malloc which must be freed
+	int is_file = 0;
+	*files = malloc(argc * sizeof(char *));
 	*file_count = 0;
 	init_flags(flags);
-	int is_file = 0;
 
 	for (int i = 1; i < argc; i++)
 	{
@@ -48,10 +47,8 @@ void ft_parse_ft_ls_argv(int argc, char *argv[], t_flags *flags, char ***files, 
 				is_file = 1; 
 			else if (argv[i][1] == '-')
 			{
-				/* ft_printf("Error: Unrecognized option -- %s\n", argv[i]);
-				var_error = ERROR; */
 				ft_unrecognized_option(&argv[i][2]);
-				return; ; //with ft_ls -- -la /path_to_something it will print error but it will not exit. It treats '-la' as a file
+				return ;
 			}
 			else
 			{
@@ -65,8 +62,6 @@ void ft_parse_ft_ls_argv(int argc, char *argv[], t_flags *flags, char ***files, 
 						case 'R': flags->R = 1; break;
 						case 't': flags->t = 1; break;
 						default: ft_invalid_option(&argv[i][j]);
-						//default: ft_printf("Error: Invalid option -%c\n", argv[i][j]);
-						//var_error = ERROR;
 						return ;
 					}
 				}
@@ -80,7 +75,7 @@ void ft_parse_ft_ls_argv(int argc, char *argv[], t_flags *flags, char ***files, 
 	}
 	if (*file_count == 0)
 	{
-		ft_set_file(".", file_count, files);//if no files are passed, it will use the current directory content
+		ft_set_file(".", file_count, files);
 	}
 	if (flags->l || flags->a || flags->r || flags->R || flags->t)
 		flags->is_flag = 1;

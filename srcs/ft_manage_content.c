@@ -31,7 +31,6 @@ int ft_delete_node(t_content *node_to_delete){
 	node_to_delete->begin = node_to_delete;
 	node_to_delete->end = node_to_delete;
 	if (node_to_delete->subdir != NULL){
-		ft_printf("Removing subdir: %s\n", node_to_delete->name);
 		free_content_dir(&node_to_delete->subdir);
 	}
 	free_content_dir(&node_to_delete);
@@ -46,7 +45,6 @@ t_content *ft_remove_node(t_content *node)
 		return NULL;
 	current = node->begin;
 	if (node->begin == node){
-		//ft_printf("Removing from head: node_to_delete is the begining: %s\n", node->name);
 		if (current->next == NULL){
 			ft_delete_node(node);
 			return NULL;
@@ -62,7 +60,6 @@ t_content *ft_remove_node(t_content *node)
 		ft_delete_node(node);
 		return tmp;
 	} else if (node->end == node){
-		//ft_printf("Removing from tail: node_to_delete is the end: %s\n", node->name);
 		if (node->prev == NULL){
 			ft_delete_node(node);
 			return NULL;
@@ -81,7 +78,6 @@ t_content *ft_remove_node(t_content *node)
 		
 		while (current != NULL){
 			if (current == node){
-				//ft_printf("Removing from middle: node_to_delete is in the middle: %s\n", node->name);
 				tmp = node->prev;
 				tmp->next = node->next;
 				node->next->prev = tmp;
@@ -116,24 +112,11 @@ int ft_insert_at_begining(t_content **container, t_content *new_node)
 			current_node = current_node->next;
 		}
 	}
-	
 	return EXIT_SUCCESS;
 }
 //function to insert in the middle of a container before container position
 int ft_insert_in_between(t_content **container, t_content *new_node)
 {
-	//print debug container
-	/* ft_printf("Inserting in the middle %s\n", new_node->name);
-	ft_printf("*****************\n");
-	ft_printf("Container: \n");
-	ft_printf("Begin: %s\n", (*container)->begin->name);
-	ft_printf("current: %s\n", (*container)->name);
-	ft_printf("Next: %s\n", (*container)->next->name);
-	ft_printf("Prev: %s\n", (*container)->prev->name);
-	ft_printf("End: %s\n", (*container)->end->name);
-	ft_printf("*****************\n"); */
-	//end debug
-
 	t_content *current_node;
 	if (!(*container))
 	{
@@ -202,11 +185,15 @@ int ft_check_file(t_content **container, const char *name)
 //get the head of the container
 t_content *ft_get_container_head(t_content *container)
 {
+	if (!container)
+		return NULL;
     return container->begin;
 }
 //get the end of the container
 t_content *ft_get_container_tail(t_content *container)
 {
+	if (!container)
+		return NULL;
 	return container->end;
 }
 // Add a new entry to the t_content_dir list
@@ -272,7 +259,7 @@ int ft_add_new_node_by_time(t_content **container, t_content *new_node)
 		}
 		else if (current->file_description->timestamp == new_node->file_description->timestamp)
 		{
-			if (ft_strcmp(current->name, new_node->name) >= 0)//("a", "b")
+			if (ft_strcmp(current->name, new_node->name) >= 0)
 			{
 				if (current->prev == NULL) {
 					return ft_insert_at_begining(&current, new_node);
@@ -308,42 +295,3 @@ void free_content_dir(t_content **container)
         current = next;
     }
 }
-/**************************************************************** */
-/* // Insert a new node maintaining the alfanumeric order
-int insert_subdir_node(t_content **subdir, const char *name)
-{
-    t_content *current_node;
-    t_content *new_node;
-    if (!name || !ft_strlen(name))
-        return EXIT_FAILURE;
-    if (!(*subdir))
-    {
-		if (!(*subdir = new_container(name)))
-		    return (EXIT_FAILURE);
-		return EXIT_SUCCESS;
-    }
-	//ft_printf("Inserting new subdir %s\n", name);
-    current_node = (*subdir)->begin;
-    while (current_node != NULL && ft_strcmp(current_node->name, name) < 0)
-    {
-        current_node = current_node->next;
-    }
-	if (!(new_node = new_container(name)))
-			return (EXIT_FAILURE);
-	if (current_node == NULL) //Insert at the end
-	{
-		//ft_printf("Inserting at the end\n");
-		ft_insert_at_ending(subdir, new_node);
-	}
-	else if (current_node == *subdir) //Insert at the begining
-	{
-		//ft_printf("Inserting at the begining -> %s\n", name);
-		ft_insert_at_begining(subdir, new_node);
-	} 
-	else //before current_node Insrtion in the middle
-	{
-		ft_insert_in_between(&current_node, new_node);
-	}
-	return EXIT_SUCCESS;
-}
- */

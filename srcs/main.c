@@ -26,12 +26,11 @@ int main(int args, char *argv[])
 	
 	if (file_count > 0)
 		var_error = ft_query_file(files_to_search, file_count, &container, flags);
-	//we have to check for container and make sure it is not null. Have in mindo all mallocs and frees
 	if (container != NULL)
 	{
 		t_content *current = ft_get_container_head(container);
 		
-		if (current != NULL && ft_strlen(current->name)/* current->name != NULL */){
+		if (current != NULL && ft_strlen(current->name)){
 			
 			while (current != NULL)
 			{
@@ -49,17 +48,13 @@ int main(int args, char *argv[])
 			ft_printf("Failed to print info file\n");
 			return (EXIT_FAILURE);
 		}
-		//ft_recursive(&(*container), flags);
-		
 		if ((container != NULL)){
 			current = ft_get_container_head(container);
-			
 			while (current != NULL)
 			{
 				free_content_dir(&current->subdir);
 				current = current->next;
 			}
-			
 			free_content_dir(&container);
 		}
 	}

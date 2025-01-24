@@ -57,7 +57,6 @@ void ft_print_description(t_file *file_description, t_columns columns)
     ft_printf("%*d ", columns.size, file_description->size);
     
     ft_printf("%s ", date);
-    //ft_printf(">>>> %d ", file_description->timestamp);
     if (file_description->type == 'l')
     {
         ft_printf("%s -> %s\n", file_description->fname, file_description->link);
@@ -202,8 +201,6 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
             current = (flags.r) ? current->prev : current->next;
             continue;
         }
-        
-        
         // Handle the -l flag: Print detailed information
         if (flags.l || (flags.R && flags.l)) //This if is with -l flag
         {
@@ -250,13 +247,6 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
         }
         else //From Here is without -l flag
         {
-            /* if (current->error == -1 || (current->subdir != NULL && current->subdir->error == -1))
-            {
-                //ft_printf("ft_ls: '%s': No such file or directory\n", current->name);
-                ft_error_open_dir(current->name);
-                current = (flags.r) ? current->prev : current->next;
-                continue;
-            } */
             if (current->file_description->type == 'd' && count > 1)
             {
                 if (is_new_line == 1)
@@ -339,7 +329,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
     {
         ft_printf("\n");
     }else if(count == 1 && is_new_line == -1 && !flags.l){
-        ft_printf("--\n");
+        ft_printf("\n");
     }
     return (SUCCESS);
 }
