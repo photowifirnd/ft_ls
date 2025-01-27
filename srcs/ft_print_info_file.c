@@ -108,21 +108,21 @@ int ft_print_files_in_args(t_content **container, t_flags flags, t_columns colum
         }
         free_content_dir(&tmp);
     }
-    current = (*container)->begin;
-    int dir = 0;
-    int file = 0;
+         current = (*container)->begin;
+    
     while (current != NULL)
     {
-        if (current->file_description->type == 'd')
-            dir = 1;
         if (current->file_description->type != 'd')
         {
-            file++;
+            //printf("\nremoving current->name: %s", current->name);
             current = ft_remove_node(current);
-            if (current != NULL && current->file_description->type != 'd')
+            if (current != NULL && current->file_description->type != 'd'){
                 continue;
+            }
+            //printf("After removed current->name: %s", current->name);
             if (current == NULL){
-                //ft_printf("\n");
+                if (!flags.l)
+                    printf("\n");
                 ret = -1;
                 break;
             }
@@ -132,12 +132,6 @@ int ft_print_files_in_args(t_content **container, t_flags flags, t_columns colum
         }
             
         current = current->next;
-    }
-    //ft_printf("dir: %d file: %d\n", dir, file);
-    if (!dir && (file > 1)){
-        if (!flags.l)
-        ft_printf("\n");
-        ret = -1;
     }
     return ret;
 }
@@ -244,7 +238,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
             {
                 ft_recursive(current, flags);
                 
-                if (!is_recursive && !flags.a && !flags.r && current->next != NULL){
+                if (!is_recursive && !flags.a && !flags.r &&current->next != NULL){
                     printf("\n");
                     is_new_line = 0;
                 }
@@ -340,8 +334,6 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
     }
     if (!no_directory && is_new_line == 1 && !flags.l)
     {
-        ft_printf("\n");
-    }else if(count == 1 && is_new_line == -1 && !flags.l){
         ft_printf("\n");
     }
     return (SUCCESS);
