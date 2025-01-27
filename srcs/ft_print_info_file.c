@@ -213,7 +213,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
         {
             if (current->file_description->type == 'd')
             {
-                if (count > 1){
+                if (count > 1 || flags.R){
                     ft_printf("%s:\n", current->file_description->fname);
                 }
                 ft_printf("total %d\n", current->blk_total);
@@ -238,7 +238,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
             {
                 ft_recursive(current, flags);
                 
-                if (!is_recursive && !flags.a && !flags.r &&current->next != NULL){
+                if (!is_recursive && !flags.a && !flags.r && current->next != NULL){
                     printf("\n");
                     is_new_line = 0;
                 }
@@ -247,8 +247,10 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                 {
                     ft_printf("\n");
                 }
-                else if (!is_recursive && flags.r && !flags.a && current->prev != NULL && no_directory && current->prev->file_description->type == 'd') {
+                else if (!is_recursive && flags.r && !flags.a && current->prev != NULL && no_directory /* && current->prev->file_description->type == 'd' */) {
                     ft_printf("\n");
+                }else if (!is_recursive && !flags.r && current->next != NULL && !is_new_line) {
+                    printf("\n");
                 }
             }
         }
