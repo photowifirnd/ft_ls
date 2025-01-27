@@ -110,7 +110,7 @@ int ft_print_files_in_args(t_content **container, t_flags flags, t_columns colum
     }
          current = (*container)->begin;
     
-    while ( flags.l && current != NULL)
+    while ( /* flags.l &&  */current != NULL)
     {
         if (current->file_description->type != 'd')
         {
