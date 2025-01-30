@@ -122,7 +122,7 @@ int ft_print_files_in_args(t_content **container, t_flags flags, t_columns colum
             //printf("After removed current->name: %s", current->name);
             if (current == NULL){
                 if (!flags.l)
-                    printf("\n");
+                   ft_printf("\n");
                 ret = -1;
                 break;
             }
@@ -239,7 +239,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                 ft_recursive(current, flags);
                 
                 if (!is_recursive && !flags.a && !flags.r && current->next != NULL){
-                    printf("\n");
+                    ft_printf("\n");
                     is_new_line = 0;
                 }
                 else if (!is_recursive && ((!flags.r && current->next != NULL && !no_directory) ||
@@ -250,7 +250,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                 else if (!is_recursive && flags.r && !flags.a && current->prev != NULL && no_directory /* && current->prev->file_description->type == 'd' */) {
                     ft_printf("\n");
                 }else if (!is_recursive && !flags.r && current->next != NULL && !is_new_line) {
-                    printf("\n");
+                    ft_printf("\n");
                 }
             }
         }
@@ -315,7 +315,7 @@ int ft_print_info_file(t_content **entry, t_flags flags, int count, int is_recur
                     return (EXIT_FAILURE);
                 }
                  if (!is_recursive && !flags.a && !flags.r &&current->next != NULL){
-                    printf("\n");
+                    ft_printf("\n");
                     is_new_line = 0;
                 }
                 else if (!is_recursive && ((!flags.r && current->next != NULL && !no_directory) ||
